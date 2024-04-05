@@ -1,0 +1,120 @@
+body {
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+    padding-top: 80px; /* Adjust based on nav height */
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Navigation bar styling */
+.navbar {
+    background-color: #ffffff;
+    padding-bottom: 10px; /* New padding for visual separation */
+}
+
+.nav-link {
+    color: #555 !important;
+    font-weight: bold; /* Make links bold */
+}
+
+.nav-link:hover, .nav-link:focus {
+    color: #007bff !important; /* Adjust for better visibility */
+}
+
+/* Header and logo styling */
+.header-logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+
+/* Site name/logo styling */
+#mobile-home {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* Icons in the navbar */
+.fas {
+    margin-right: 5px;
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+    border-radius: 0;
+}
+
+/* Search and other form elements */
+.form-control {
+    border-radius: 0;
+}
+
+/* Buttons */
+.btn-black {
+    background-color: #333;
+    color: #fff;
+}
+
+.btn-black:hover {
+    background-color: #000;
+}
+
+/* Utility classes */
+.text-center {
+    text-align: center;
+}
+
+.mr-5 {
+    margin-right: 3rem;
+}
+
+.my-0 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Main content enhancements */
+.main-content h1 {
+    font-size: 2.5rem; /* Larger heading for impact */
+    margin-bottom: 1.5rem; /* Space after heading */
+}
+
+.main-content p {
+    font-size: 1.1rem; /* Slightly larger paragraph */
+}
+/* Button enhancements */
+.btn-primary, .btn-black {
+    border-radius: 0; /* Align with theme */
+    padding: 10px 20px; /* Larger clickable area */
+    font-size: 18px; /* Larger text */
+}
+
+.btn-primary:hover, .btn-black:hover {
+    opacity: 0.8; /* Subtle hover effect */
+}
+
+/* Utility and responsive adjustments */
+.custom-spacing {
+    padding-top: 2rem; /* Space below navbar */
+    padding-bottom: 2rem; /* Space before footer */
+}
+
+@media (max-width: 768px) {
+    .custom-spacing {
+        padding-top: 100px; /* Increase for mobile */
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .d-lg-none {
+        display: block !important;
+    }
+}
+
+@media (min-width: 993px) {
+    .d-none.d-lg-block {
+        display: block !important;
+    }
+}

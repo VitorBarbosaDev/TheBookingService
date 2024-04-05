@@ -33,6 +33,7 @@
 
     <title>{% block extra_title %}Service Booking Platform{% endblock %}</title>
 </head>
+
 <body>
 <header class="container-fluid fixed-top">
     <div class="row bg-light">
@@ -45,7 +46,7 @@
     </div>
 </header>
 
-<main role="main" class="container mt-5 pt-5">
+<main role="main" class="container mt-5 pt-5 custom-spacing">
     {% if messages %}
     <!-- Messages display block -->
     <div class="message-container">
@@ -65,9 +66,13 @@
     </div>
     {% endif %}
 
-    {% block page_header %}{% endblock %}
+    {% block page_header %}
 
-    {% block content %}{% endblock %}
+    {% endblock %}
+
+    {% block content %}
+
+    {% endblock %}
 
     {% block postloadjs %}
     <script type="text/javascript">
