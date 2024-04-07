@@ -1,25 +1,38 @@
 from allauth.account.forms import SignupForm
 from django import forms
+from .models import Business
 
 class CustomSignupForm(SignupForm):
-    is_business_owner = forms.BooleanField(required=False, label='Register as business owner')
+    # Removed is_business_owner as it's determined by URL query parameter
     business_name = forms.CharField(max_length=255, required=False, label='Business Name')
 
     def __init__(self, *args, **kwargs):
         super(CustomSignupForm, self).__init__(*args, **kwargs)
-        self.fields['business_name'].widget.attrs['placeholder'] = 'Business Name (Required if registering as a business)'
-        self.fields['business_name'].widget.attrs['class'] = 'form-control'
-        self.fields['is_business_owner'].widget.attrs['class'] = 'form-check-input'
+        self.fields['business_name'].widget.attrs.update({
+            'placeholder': 'Business Name (Only if registering as a business)',
+            'class': 'form-control',
+            'style': 'display:none;'  # Initially hide this field
+        })
 
     def save(self, request):
         user = super(CustomSignupForm, self).save(request)
-        user.is_business_owner = self.cleaned_data['is_business_owner']
-        user.save()
+        account_type = request.GET.get('type', 'personal')
 
-        if user.is_business_owner:
-            # Assuming you have a signal or method to create the UserProfile
-            user_profile = user.userprofile
-            user_profile.business_name = self.cleaned_data['business_name']
-            user_profile.save()
+        if account_type == 'business':
+            user.is_business_owner = True
+            user.save()
+
+            business_name = self.cleaned_data.get('business_name')
+            if business_name:
+                Business.objects.create(
+                    owner=user,
+                    name=business_name,
+                    description=self.cleaned_data.get('description', ''),
+                    address=self.cleaned_data.get('address', ''),
+                    phone_number=self.cleaned_data.get('phone_number', ''),
+                    email=self.cleaned_data.get('email', ''),
+                    website=self.cleaned_data.get('website', ''),
+                    logo=self.cleaned_data.get('logo', None),
+                )
 
         return user

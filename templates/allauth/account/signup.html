@@ -7,15 +7,107 @@
 {% block content %}
 <h1>{% trans "Sign Up" %}</h1>
 
-<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+<div style="background-color: #f8d7da; color: #721c24; margin-bottom: 15px; padding: 15px; border-radius: 4px;">
+  This is a custom sign-up page. If you see this message, you're using the custom template!
+</div>
 
-<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <button type="submit">{% trans "Sign Up" %} &raquo;</button>
-</form>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" href="#personal" data-toggle="tab">Personal</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#business" data-toggle="tab">Business</a>
+  </li>
+</ul>
 
+<div class="tab-content">
+  <div id="personal" class="container tab-pane active"><br>
+    <h3>Personal Account</h3>
+    <form id="personal_form" method="post" action="{% url 'account_signup' %}?type=personal">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="id_first_name">{% trans "First Name" %}</label>
+        <input type="text" id="id_first_name" name="first_name" class="form-control" placeholder="{% trans 'Your first name' %}" required>
+      </div>
+      <div class="form-group">
+        <label for="id_last_name">{% trans "Last Name" %}</label>
+        <input type="text" id="id_last_name" name="last_name" class="form-control" placeholder="{% trans 'Your last name' %}" required>
+      </div>
+      <div class="form-group">
+        <label for="id_email">{% trans "Email" %}</label>
+        <input type="email" id="id_email" name="email" class="form-control" placeholder="{% trans 'Your email address' %}" required>
+      </div>
+      <div class="form-group">
+        <label for="id_password1">{% trans "Password" %}</label>
+        <input type="password" id="id_password1" name="password1" class="form-control" placeholder="{% trans 'Choose a password' %}" required>
+      </div>
+      <div class="form-group">
+        <label for="id_password2">{% trans "Confirm Password" %}</label>
+        <input type="password" id="id_password2" name="password2" class="form-control" placeholder="{% trans 'Confirm your password' %}" required>
+      </div>
+      <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+      <button type="submit" class="btn btn-primary">{% trans "Sign Up" %}</button>
+    </form>
+  </div>
+
+  <div id="business" class="container tab-pane fade"><br>
+    <h3>Business Account</h3>
+    <form id="business_form" method="post" action="{% url 'account_signup' %}?type=business" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="id_business_name">{% trans "Business Name" %}</label>
+        <input type="text" id="id_business_name" name="business_name" class="form-control" placeholder="{% trans 'Your business name' %}" required>
+      </div>
+      <div class="form-group">
+        <label for="id_description">{% trans "Description" %}</label>
+        <textarea id="id_description" name="description" class="form-control" placeholder="{% trans 'Describe your business' %}"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="id_address">{% trans "Address" %}</label>
+        <input type="text" id="id_address" name="address" class="form-control" placeholder="{% trans 'Business address' %}">
+      </div>
+      <div class="form-group">
+        <label for="id_phone_number">{% trans "Phone Number" %}</label>
+        <input type="text" id="id_phone_number" name="phone_number" class="form-control" placeholder="{% trans 'Contact phone number' %}">
+      </div>
+      <div class="form-group">
+        <label for="id_email">{% trans "Email" %}</label>
+        <input type="email" id="id_email" name="email" class="form-control" placeholder="{% trans 'Business email' %}">
+      </div>
+      <div class="form-group">
+        <label for="id_website">{% trans "Website" %}</label>
+        <input type="url" id="id_website" name="website" class="form-control" placeholder="{% trans 'Business website URL' %}">
+      </div>
+      <div class="form-group">
+        <label for="id_logo">{% trans "Logo" %}</label>
+        <input type="file" id="id_logo" name="logo" class="form-control-file">
+      </div>
+      <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+      <button type="submit">{% trans "Sign Up" %}</button>
+    </form>
+  </div>
+</div>
 {% endblock %}
+
+{% block extra_js %}
+<script>
+  $(document).ready(function(){
+    $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+      var target = $(e.target).attr("href"); // activated tab
+      var businessNameField = $('#id_business_name').closest('.form-group');
+
+      if(target === '#business') {
+        businessNameField.show();
+        // Optional: If keeping is_business_owner field
+        $('input[name="is_business_owner"]').val('True');
+      } else {
+        businessNameField.hide();
+        // Optional: If keeping is_business_owner field
+        $('input[name="is_business_owner"]').val('False');
+      }
+    });
+  });
+</script>
+{% endblock %}
+
+ <!-- This ends the extra_js block -->
