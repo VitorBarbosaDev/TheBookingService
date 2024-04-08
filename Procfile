@@ -1,1 +1,1 @@
-web: gunicorn Boutique_Ado.wsgi:application
+web: gunicorn TheBookingService.wsgi:application
