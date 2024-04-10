@@ -17,9 +17,8 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 
-# Simple registrations for other models
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'phone_number', 'address']
+    list_display = ['user', 'default_phone_number', 'default_street_address1', 'default_street_address2', 'default_town_or_city', 'default_county', 'default_postcode', 'default_country']
 
 class BusinessAdmin(admin.ModelAdmin):
     list_display = ['name', 'owner', 'email', 'website']

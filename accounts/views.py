@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import CustomSignupForm
 from django.contrib.auth import login  # Import login method
 from .models import Business, UserProfile
+from django.contrib.auth.decorators import login_required
 
 def custom_signup_view(request):
     account_type = request.GET.get('type', 'personal')  # Default to 'personal'
@@ -26,15 +27,27 @@ def custom_signup_view(request):
                     website=form.cleaned_data.get('website', ''),
                     logo=form.cleaned_data.get('logo', None),
                 )
-                # Redirect to a business-specific page, e.g., business dashboard
+
                 return redirect('business_dashboard_url')
             else:
                 # Personal account setup logic
                 UserProfile.objects.create(user=user)
-                # Redirect to a general welcome or dashboard page
+
                 return redirect('some_personal_success_url')
     else:
-        form = CustomSignupForm(initial={'is_business_owner': account_type == 'business'})
+        form = CustomSignupForm(account_type=account_type)  # Pass account_type here for GET requests too
 
     context = {'form': form, 'account_type': account_type}
     return render(request, 'accounts/signup.html', context)
+
+
+@login_required
+def profile_view(request):
+    """
+    Display the user's profile to the user.
+    """
+    user_profile = UserProfile.objects.get(user=request.user)
+    context = {
+        'user_profile': user_profile,
+    }
+    return render(request, 'accounts/profile.html', context)

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>User Profile</h2>
+<div>
+    <strong>Username:</strong> {{ user_profile.user.username }}
+</div>
+<div>
+    <strong>Email:</strong> {{ user_profile.user.email }}
+</div>
+<div>
+    <strong>Phone Number:</strong> {{ user_profile.phone_number }}
+</div>
+<div>
+    <strong>Address:</strong> {{ user_profile.address }}
+</div>
+<div>
+    <strong>Postcode:</strong> {{ user_profile.postcode }}
+</div>
+<div>
+    <strong>City:</strong> {{ user_profile.city }}
+</div>
+{% endblock %}
