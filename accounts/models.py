@@ -8,6 +8,16 @@ from django_countries.fields import CountryField
 class CustomUser(AbstractUser):
     is_business_owner = models.BooleanField(default=False)
 
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "Categories"
+
 class UserProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     default_phone_number = models.CharField(max_length=20, null=True, blank=True)
@@ -34,6 +44,10 @@ class Business(models.Model):
     email = models.EmailField(blank=True, null=True)
     website = models.URLField(blank=True, null=True)
     logo = CloudinaryField('business_logos', blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='businesses')
+
+    def __str__(self):
+        return self.name
 
 class Service(models.Model):
     SERVICE_TYPES = (
@@ -45,11 +59,15 @@ class Service(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     service_type = models.CharField(max_length=10, choices=SERVICE_TYPES, default='fixed')
-    price = models.DecimalField(max_digits=10, decimal_places=2, help_text="Price for fixed rate services.")
-    price_per_hour = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, help_text="Hourly rate for hourly priced services.")
-    min_duration_hours = models.IntegerField(null=True, blank=True, help_text="Minimum duration in hours for bookings, applicable for hourly priced services.")
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price_per_hour = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    min_duration_hours = models.IntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     image = CloudinaryField('service_images', blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='services')
+
+    def __str__(self):
+        return self.name
 
 class Booking(models.Model):
     customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='customer_bookings')

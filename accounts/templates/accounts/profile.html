@@ -9,15 +9,32 @@
     <strong>Email:</strong> {{ user_profile.user.email }}
 </div>
 <div>
-    <strong>Phone Number:</strong> {{ user_profile.phone_number }}
+    <strong>Phone Number:</strong> {{ user_profile.default_phone_number }}
 </div>
 <div>
-    <strong>Address:</strong> {{ user_profile.address }}
+    <strong>Address Line 1:</strong> {{ user_profile.default_street_address1 }}
 </div>
 <div>
-    <strong>Postcode:</strong> {{ user_profile.postcode }}
+    <strong>Address Line 2:</strong> {{ user_profile.default_street_address2 }}
 </div>
 <div>
-    <strong>City:</strong> {{ user_profile.city }}
+    <strong>City:</strong> {{ user_profile.default_town_or_city }}
+</div>
+<div>
+    <strong>County:</strong> {{ user_profile.default_county }}
+</div>
+<div>
+    <strong>Postcode:</strong> {{ user_profile.default_postcode }}
+</div>
+<div>
+    <strong>Country:</strong> {{ user_profile.default_country }}
+</div>
+<div>
+    <strong>Profile Picture:</strong>
+    {% if user_profile.profile_picture %}
+    <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture">
+    {% else %}
+    No profile picture available.
+    {% endif %}
 </div>
 {% endblock %}
