@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 page-content">
+    <h2 class="text-center">Services in Category: {{ category.name|default:"All Categories" }}</h2>
+    <div class="row">
+        {% for service in services %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if service.image %}
+                <img src="{{ service.image.url }}" class="card-img-top" alt="{{ service.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ service.name }}</h5>
+                    <p class="card-text">{{ service.description|truncatewords:20 }}</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted"> {% if service.service_type == 'fixed' %}
+                        Price: ${{ service.price }}
+                        {% elif service.service_type == 'hourly' %}
+                        Price per hour: ${{ service.price_per_hour }}
+                        {% endif %}</small>
+                    <a href="{% url 'services:service_detail' service.id %}" class="btn btn-primary float-right">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">No services found in this category.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

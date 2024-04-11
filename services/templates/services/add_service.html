@@ -3,13 +3,15 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<div class="page-content">
 <h2>Add New Service</h2>
-<form method="post" novalidate>
+<form method="post" novalidate enctype="multipart/form-data">
     {% csrf_token %}
     {{ form|crispy }}
     <button type="submit" class="btn btn-primary">Add Service</button>
     <a href="{% url 'services:my_services' %}" class="btn btn-secondary">Cancel</a>
 </form>
+</div>
 {% endblock %}
 
 

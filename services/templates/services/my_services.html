@@ -1,33 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>My Services</h2>
+<div class="page-content">
+    <h2>My Services</h2>
 
-<!-- Button to Add New Service -->
-<div class="mb-3">
-    <a href="{% url 'services:add_service' %}" class="btn btn-primary">Add New Service</a>
-</div>
 
-<!-- List of Existing Services -->
-<div class="list-group">
-    {% for service in services %}
-    <div class="list-group-item list-group-item-action flex-column align-items-start">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{ service.name }}</h5>
-            <small>{{ service.service_type }}</small>
-        </div>
-        <p class="mb-1">{{ service.description }}</p>
-        <small>Price: {{ service.price }}</small>
-        <div>
-            <!-- Edit Button -->
-            <a href="{% url 'services:edit_service' service.id %}" class="btn btn-sm btn-secondary">Edit</a>
-            <!-- Delete Button -->
-            <a href="{% url 'services:delete_service' service.id %}" class="btn btn-sm btn-danger">Delete</a>
-        </div>
+    <div class="mb-3">
+        <a href="{% url 'services:add_service' %}" class="btn btn-primary">Add New Service</a>
     </div>
-    {% empty %}
-    <p>No services found.</p>
-    {% endfor %}
-</div>
 
+
+    <div class="list-group">
+        {% for service in services %}
+        <div class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ service.name }}</h5>
+                <small>{{ service.service_type }}</small>
+            </div>
+            <p class="mb-1">{{ service.description }}</p>
+            <small>
+                {% if service.service_type == 'fixed' %}
+                Price: ${{ service.price }}
+                {% elif service.service_type == 'hourly' %}
+                Price per hour: ${{ service.price_per_hour }}
+                {% endif %}
+            </small>
+            <div>
+
+                <a href="{% url 'services:edit_service' service.id %}" class="btn btn-sm btn-secondary">Edit</a>
+
+                <a href="{% url 'services:delete_service' service.id %}" class="btn btn-sm btn-danger">Delete</a>
+            </div>
+        </div>
+        {% empty %}
+        <p>No services found.</p>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

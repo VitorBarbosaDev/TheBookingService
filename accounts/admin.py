@@ -31,8 +31,7 @@ class ReviewAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'parent')
-    search_fields = ('name',)
+    list_display = ['name', 'slug', 'parent']
 
 
 admin.site.register(UserProfile, UserProfileAdmin)

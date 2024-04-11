@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %} {% load business_filters %}
+
+{% block content %}
+<div class="container mt-5 page-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="service-detail">
+                <!-- Display the service image or a default image if none exists -->
+                {% if service.image %}
+                <img src="{{ service.image.url }}" alt="{{ service.name }}" class="service-img">
+                {% else %}
+                <img src="{% static 'images/nobody.jpg' %}" alt="Default image" class="service-img">
+                {% endif %}
+
+                <h2>{{ service.name }}</h2>
+                <p>Business: {{ service.business }}</p>
+                <p>Category: {{ service.category }}</p>
+                <p>{{ service.description }}</p>
+                <p>
+                    {% if service.service_type == 'fixed' %}
+                    Price: ${{ service.price }}
+                    {% elif service.service_type == 'hourly' %}
+                    Price per hour: ${{ service.price_per_hour }}
+                    {% endif %}
+                </p>
+                <!-- Display Business Hours -->
+                <div class="business-hours">
+                    <h3>Business Hours</h3>
+                    {% for bh in business_hours_qs %}
+                    <div class="day-hours">
+                        <strong>{{ bh.day }}:</strong> {{ bh.open_time|date:"P" }} - {{ bh.close_time|date:"P" }}
+                    </div>
+                    {% empty %}
+                    <p>No business hours set.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

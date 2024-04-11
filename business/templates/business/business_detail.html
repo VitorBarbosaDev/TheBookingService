@@ -21,6 +21,7 @@
     <div class="detail-action-buttons">
         <a href="{% url 'edit_business' business.id %}" class="btn btn-primary">Edit Business</a>
         <a href="{% url 'delete_business' business.pk %}" class="btn btn-danger">Delete Business</a>
+        <a href="{% url 'business_hours_list_add' business.id %}" class="btn btn-info">View Business Hours</a>
     </div>
 </div>
 {% endblock %}
