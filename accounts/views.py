@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from .forms import CustomSignupForm, UserProfileForm
 from django.contrib.auth import login
-from .models import Business, UserProfile
+from .models import  UserProfile
+from business.models import Business
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 

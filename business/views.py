@@ -1,3 +1,7 @@
 from django.shortcuts import render
+from .models import Business
 
-# Create your views here.
+def business_detail(request):
+    business = Business.objects.first()
+    context = {'business': business}
+    return render(request, 'business/business_detail.html', context)

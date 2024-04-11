@@ -8,7 +8,7 @@ class Service(models.Model):
         ('hourly', 'Hourly Rate'),
     )
 
-    business = models.ForeignKey('accounts.Business', on_delete=models.CASCADE, related_name='services')
+    business = models.ForeignKey('business.Business', on_delete=models.CASCADE, related_name='services')
     name = models.CharField(max_length=255)
     description = models.TextField()
     service_type = models.CharField(max_length=10, choices=SERVICE_TYPES, default='fixed')

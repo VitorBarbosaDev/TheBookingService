@@ -115,6 +115,19 @@ body {
     margin-right: auto;
 }
 
+.business-details {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.business-details p, .business-details div {
+    margin-bottom: 10px;
+}
+
 @media (max-width: 768px) {
     .custom-spacing {
         padding-top: 100px; /* Increase for mobile */

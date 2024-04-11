@@ -1,6 +1,7 @@
 from allauth.account.forms import SignupForm
 from django import forms
-from .models import UserProfile, Business, Category
+from .models import UserProfile, Category
+from business.models import Business
 from cloudinary.uploader import upload
 from django_countries.fields import CountryField
 from django_countries.widgets import CountrySelectWidget
@@ -39,7 +40,8 @@ class CustomSignupForm(SignupForm):
         profile_pic = self.cleaned_data.get('profile_picture')
         if profile_pic:
             upload_result = upload(profile_pic)
-            user.userprofile.profile_picture = upload_result.get('url')
+            profile_pic_url = upload_result.get('url')  # Properly define profile_pic_url here
+            user.userprofile.profile_picture = profile_pic_url
             user.userprofile.save()
 
         # This ensures that the UserProfile is updated rather than creating a new one
