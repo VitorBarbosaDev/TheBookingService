@@ -100,6 +100,9 @@ body {
     padding-bottom: 2rem; /* Space before footer */
 }
 
+
+
+
 @media (max-width: 768px) {
     .custom-spacing {
         padding-top: 100px; /* Increase for mobile */

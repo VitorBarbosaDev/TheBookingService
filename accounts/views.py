@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import CustomSignupForm
+from .forms import CustomSignupForm, UserProfileForm
 from django.contrib.auth import login
 from .models import Business, UserProfile
 from django.contrib.auth.decorators import login_required
@@ -51,3 +51,24 @@ def profile_view(request):
         'user_profile': user_profile,
     }
     return render(request, 'accounts/profile.html', context)
+
+@login_required
+def edit_profile_view(request):
+    user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated successfully.')
+            return redirect('profile')
+    else:
+        form = UserProfileForm(instance=user_profile)
+    return render(request, 'accounts/edit_profile.html', {'form': form})
+
+@login_required
+def delete_profile_view(request):
+    if request.method == 'POST':
+        request.user.delete()
+        messages.success(request, 'Your account has been deleted successfully.')
+        return redirect('home')
+    return render(request, 'accounts/delete_profile_confirm.html')

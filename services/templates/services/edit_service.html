@@ -1,11 +1,36 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
 <h2>Edit Service</h2>
-<form method="post">
+<form method="post" novalidate>
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form|crispy }}
     <button type="submit" class="btn btn-primary">Save Changes</button>
     <a href="{% url 'services:my_services' %}" class="btn btn-secondary">Cancel</a>
 </form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        function togglePriceFields() {
+            var selectedType = $('#id_service_type').val();
+            if (selectedType === 'fixed') {
+                $('#div_id_price').show();
+                $('#div_id_price_per_hour').hide();
+                $('#div_id_min_duration_hours').hide();
+            } else if (selectedType === 'hourly') {
+                $('#div_id_price').hide();
+                $('#div_id_price_per_hour').show();
+                $('#div_id_min_duration_hours').show();
+            }
+        }
+
+        togglePriceFields();
+
+        $('#id_service_type').change(togglePriceFields);
+    });
+</script>
 {% endblock %}

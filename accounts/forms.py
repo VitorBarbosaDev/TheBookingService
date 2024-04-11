@@ -52,7 +52,8 @@ class CustomSignupForm(SignupForm):
                 'default_town_or_city': self.cleaned_data.get('default_town_or_city'),
                 'default_county': self.cleaned_data.get('default_county'),
                 'default_postcode': self.cleaned_data.get('default_postcode'),
-                'default_country': self.cleaned_data.get('default_country')
+                'default_country': self.cleaned_data.get('default_country'),
+                'profile_picture': profile_pic_url,
             }
         )
 
@@ -67,6 +68,7 @@ class CustomSignupForm(SignupForm):
             else:
                 logo_url = None
 
+            # Create Business object
             Business.objects.create(
                 owner=user,
                 name=self.cleaned_data.get('business_name'),
@@ -80,3 +82,11 @@ class CustomSignupForm(SignupForm):
             )
 
         return user
+
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['default_phone_number', 'default_street_address1', 'default_street_address2',
+                  'default_town_or_city', 'default_county', 'default_postcode', 'default_country',
+                  'profile_picture']
