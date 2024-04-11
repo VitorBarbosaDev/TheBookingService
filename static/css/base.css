@@ -223,28 +223,31 @@ body {
     word-wrap: break-word;
     word-break: break-all;
     overflow-wrap: break-word;
-    word-break: break-word; /* Non-standard for WebKit */
-    hyphens: auto; /* Optional: for automatic hyphenation */
+    word-break: break-word;
+    hyphens: auto;
 }
 
-.profile-picture-preview {
-    width: 100px; /* You can adjust the size */
-    height: 100px;
-    border-radius: 50%; /* Circular image */
-    object-fit: cover; /* To make sure the image covers the area */
-    border: 2px solid #ddd; /* A light border for the image */
-    display: block;
-    margin: 10px 0; /* Adjust margin as necessary */
+.service-img {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+    border-radius: 10px;
+}
+.business-hours, .service-detail > p, .service-detail > h2 {
+    margin-top: 20px;
+}
+.book-btn {
+    margin-top: 20px;
 }
 
 .business-logo-preview {
-    width: 100px; /* Adjust based on your preference */
+    width: 100px;
     height: 100px;
-    border-radius: 50%; /* Circular image for consistency with profile picture */
-    object-fit: cover; /* Ensures the image covers the area nicely without distortion */
-    border: 2px solid #ddd; /* Light border for the image */
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
     display: block;
-    margin: 10px auto; /* Center the image */
+    margin: 10px auto;
 }
 
 @media (max-width: 768px) {
