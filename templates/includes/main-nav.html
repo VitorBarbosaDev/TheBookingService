@@ -48,7 +48,17 @@
             </div>
         </li>
 
-        <!-- Bookings Link for Desktop -->
+        {% if request.user.is_authenticated and request.user.is_business_owner %}
+        <li class="nav-item dropdown d-none d-lg-block">
+            <a class="logo-font font-weight-bold nav-link text-black mr-5" href="{% url 'services:my_services' %}">
+                My Services
+            </a>
+        </li>
+        {% endif %}
+
+
+
+            <!-- Bookings Link for Desktop -->
         <li class="nav-item dropdown d-none d-lg-block">
             <a class="logo-font font-weight-bold nav-link text-black mr-5" href="#">
                 Bookings

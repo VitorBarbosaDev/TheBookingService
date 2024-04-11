@@ -1,10 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, UserProfile, Business, Service, Booking, Review, BusinessHours
+from .models import CustomUser, UserProfile, Business, Service, Booking, Review, BusinessHours, Category
 
-# Register your models here.
 
-# Customizing admin interface for CustomUser
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = ['username', 'email', 'is_staff', 'is_business_owner']  # Customize as needed
@@ -36,9 +34,15 @@ class ReviewAdmin(admin.ModelAdmin):
 class BusinessHoursAdmin(admin.ModelAdmin):
     list_display = ['business', 'day', 'open_time', 'close_time']
 
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'parent')
+    search_fields = ('name',)
+
+
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Business, BusinessAdmin)
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(Booking, BookingAdmin)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(BusinessHours, BusinessHoursAdmin)
+admin.site.register(Category, CategoryAdmin)

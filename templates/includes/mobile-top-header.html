@@ -29,6 +29,18 @@
         </form>
     </div>
 </li>
+
+{% if request.user.is_authenticated and request.user.is_business_owner %}
+<li class="list-inline-item">
+    <a class="text-black nav-link d-block d-lg-none" href="{% url 'services:my_services' %}">
+        <div class="text-center">
+            <i class="fas fa-briefcase fa-lg"></i>
+            <p class="my-0">My Services</p>
+        </div>
+    </a>
+</li>
+{% endif %}
+
 <li class="list-inline-item dropdown">
     <a class="text-black nav-link d-block d-lg-none" href="#" id="user-options-mobile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <div class="text-center">

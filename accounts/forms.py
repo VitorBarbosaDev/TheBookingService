@@ -1,6 +1,6 @@
 from allauth.account.forms import SignupForm
 from django import forms
-from .models import UserProfile, Business
+from .models import UserProfile, Business, Category
 from cloudinary.uploader import upload
 from django_countries.fields import CountryField
 from django_countries.widgets import CountrySelectWidget
@@ -24,6 +24,7 @@ class CustomSignupForm(SignupForm):
     email = forms.EmailField(required=False, label='Business Email')
     website = forms.URLField(required=False, label='Business Website')
     logo = forms.ImageField(required=False, label='Business Logo')
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), required=False, empty_label="Select Category")
 
     def __init__(self, *args, **kwargs):
         account_type = kwargs.pop('account_type', None)
@@ -75,6 +76,7 @@ class CustomSignupForm(SignupForm):
                 email=self.cleaned_data.get('email'),
                 website=self.cleaned_data.get('website'),
                 logo=logo_url,
+                category=self.cleaned_data.get('category'),
             )
 
         return user

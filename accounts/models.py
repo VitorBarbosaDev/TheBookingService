@@ -4,6 +4,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from cloudinary.models import CloudinaryField
 from django_countries.fields import CountryField
+from services.models import Service
+
 
 class CustomUser(AbstractUser):
     is_business_owner = models.BooleanField(default=False)
@@ -49,29 +51,11 @@ class Business(models.Model):
     def __str__(self):
         return self.name
 
-class Service(models.Model):
-    SERVICE_TYPES = (
-        ('fixed', 'Fixed Rate'),
-        ('hourly', 'Hourly Rate'),
-    )
 
-    business = models.ForeignKey(Business, on_delete=models.CASCADE, related_name='services')
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-    service_type = models.CharField(max_length=10, choices=SERVICE_TYPES, default='fixed')
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    price_per_hour = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    min_duration_hours = models.IntegerField(null=True, blank=True)
-    is_active = models.BooleanField(default=True)
-    image = CloudinaryField('service_images', blank=True, null=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='services')
-
-    def __str__(self):
-        return self.name
 
 class Booking(models.Model):
     customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='customer_bookings')
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='bookings')
+    service = models.ForeignKey('services.Service', on_delete=models.CASCADE, related_name='bookings')
     date = models.DateTimeField()
     duration_hours = models.IntegerField(default=1, help_text="Duration of the booking in hours for hourly priced services.")
     status = models.CharField(max_length=50, choices=[('confirmed', 'Confirmed'), ('pending', 'Pending'), ('cancelled', 'Cancelled')])
