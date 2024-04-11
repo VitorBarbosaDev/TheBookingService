@@ -1,50 +1,28 @@
 {% extends "base.html" %}
 {% load static %}
-{% block content %}
-<h2>User Profile</h2>
-<div class="text-center">
-    <div>
-        {% if user_profile.profile_picture %}
-        <img src="{{ user_profile.profile_picture.url }}" class="ProfilePicture" alt="Profile Picture">
-        {% else %}
-        <img src="{% static 'images/nobody.jpg' %}" class="ProfilePicture" alt="Default Profile Picture">
-        {% endif %}
-    </div>
-    <div>
-        <strong>Username:</strong> {{ user_profile.user.username }}
-    </div>
-    <div>
-        <strong>First Name:</strong> {{ user_profile.user.first_name }}
-    </div>
-    <div>
-        <strong>Last Name:</strong> {{ user_profile.user.last_name }}
-    </div>
-    <div>
-        <strong>Email:</strong> {{ user_profile.user.email }}
-    </div>
-    <div>
-        <strong>Phone Number:</strong> {{ user_profile.default_phone_number }}
-    </div>
-    <div>
-        <strong>Address Line 1:</strong> {{ user_profile.default_street_address1 }}
-    </div>
-    <div>
-        <strong>Address Line 2:</strong> {{ user_profile.default_street_address2 }}
-    </div>
-    <div>
-        <strong>City:</strong> {{ user_profile.default_town_or_city }}
-    </div>
-    <div>
-        <strong>County:</strong> {{ user_profile.default_county }}
-    </div>
-    <div>
-        <strong>Postcode:</strong> {{ user_profile.default_postcode }}
-    </div>
-    <div>
-        <strong>Country:</strong> {{ user_profile.default_country }}
-    </div>
 
-    <div class="text-center mt-3">
+{% block content %}
+<div class="container page-content">
+    <h2 class="text-center">User Profile</h2>
+    {% if user_profile.profile_picture %}
+    <img src="{{ user_profile.profile_picture.url }}" class="profile-picture" alt="Profile Picture">
+    {% else %}
+    <img src="{% static 'images/nobody.jpg' %}" class="profile-picture" alt="Default Profile Picture">
+    {% endif %}
+    <div class="detail-section">
+        <div><strong>Username:</strong> {{ user_profile.user.username }}</div>
+        <div><strong>First Name:</strong> {{ user_profile.user.first_name }}</div>
+        <div><strong>Last Name:</strong> {{ user_profile.user.last_name }}</div>
+        <div><strong>Email:</strong> {{ user_profile.user.email }}</div>
+        <div><strong>Phone Number:</strong> {{ user_profile.default_phone_number }}</div>
+        <div><strong>Address Line 1:</strong> {{ user_profile.default_street_address1 }}</div>
+        <div><strong>Address Line 2:</strong> {{ user_profile.default_street_address2 }}</div>
+        <div><strong>City:</strong> {{ user_profile.default_town_or_city }}</div>
+        <div><strong>County:</strong> {{ user_profile.default_county }}</div>
+        <div><strong>Postcode:</strong> {{ user_profile.default_postcode }}</div>
+        <div><strong>Country:</strong> {{ user_profile.default_country }}</div>
+    </div>
+    <div class="detail-action-buttons">
         <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
         <a href="{% url 'delete_profile' %}" class="btn btn-danger">Delete Profile</a>
     </div>

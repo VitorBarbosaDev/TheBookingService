@@ -92,3 +92,6 @@ class UserProfileForm(forms.ModelForm):
         fields = ['default_phone_number', 'default_street_address1', 'default_street_address2',
                   'default_town_or_city', 'default_county', 'default_postcode', 'default_country',
                   'profile_picture']
+        widgets = {
+                   'profile_picture': forms.FileInput(attrs={'class': 'file-wrap'})
+                }

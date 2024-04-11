@@ -64,7 +64,9 @@ def edit_profile_view(request):
             return redirect('profile')
     else:
         form = UserProfileForm(instance=user_profile)
-    return render(request, 'accounts/edit_profile.html', {'form': form})
+    context = {'form': form, 'user_profile': user_profile}
+    return render(request, 'accounts/edit_profile.html', context)
+
 
 @login_required
 def delete_profile_view(request):
@@ -72,4 +74,4 @@ def delete_profile_view(request):
         request.user.delete()
         messages.success(request, 'Your account has been deleted successfully.')
         return redirect('home')
-    return render(request, 'accounts/delete_profile_confirm.html')
+    return render(request, 'accounts/delete_profile.html')

@@ -15,7 +15,7 @@ body {
 
 .nav-link {
     color: #555 !important;
-    font-weight: bold; /* Make links bold */
+    font-weight: bold;
 }
 
 .nav-link:hover, .nav-link:focus {
@@ -76,43 +76,54 @@ body {
 
 /* Main content enhancements */
 .main-content h1 {
-    font-size: 2.5rem; /* Larger heading for impact */
-    margin-bottom: 1.5rem; /* Space after heading */
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .main-content p {
-    font-size: 1.1rem; /* Slightly larger paragraph */
+    font-size: 1.1rem;
 }
 /* Button enhancements */
 .btn-primary, .btn-black {
-    border-radius: 0; /* Align with theme */
-    padding: 10px 20px; /* Larger clickable area */
-    font-size: 18px; /* Larger text */
+    border-radius: 0;
+    padding: 10px 20px;
+    font-size: 18px;
 }
 
 .btn-primary:hover, .btn-black:hover {
-    opacity: 0.8; /* Subtle hover effect */
+    opacity: 0.8;
 }
 
 /* Utility and responsive adjustments */
 .custom-spacing {
-    padding-top: 2rem; /* Space below navbar */
-    padding-bottom: 2rem; /* Space before footer */
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
 
 .ProfilePicture {
-    width: 150px; /* Adjust size as needed */
-    height: 150px; /* Keep it a square for consistency */
-    border-radius: 50%; /* Circular image */
-    border: 4px solid #fff; /* White border for some pop */
-    box-shadow: 0 2px 4px rgba(0,0,0,.1); /* Soft shadow for depth */
-    object-fit: cover; /* Ensure the image covers the area nicely */
-    margin-top: -75px; /* Adjust based on your layout */
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    object-fit: cover;
+    margin-top: -75px;
     margin-bottom: 20px;
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+.header-spacer {
+    margin-top: 100px;
+}
+
+.page-content {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    padding-top: 80px; /* Default top padding */
 }
 
 .business-details {
@@ -128,9 +139,117 @@ body {
     margin-bottom: 10px;
 }
 
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.profile-picture, .business-logo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 20px auto;
+}
+
+.detail-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.detail-section strong {
+    color: #333;
+}
+
+.detail-action-buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    height: 38px;
+    box-sizing: border-box;
+}
+
+/* Ensure that both buttons have the same styling */
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Adjustments for button hover states */
+.btn-primary:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+.btn-danger:hover {
+    color: #fff;
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+
+.word-wrap {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+
+.url-wrap {
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    word-break: break-word; /* Non-standard for WebKit */
+    hyphens: auto; /* Optional: for automatic hyphenation */
+}
+
+.profile-picture-preview {
+    width: 100px; /* You can adjust the size */
+    height: 100px;
+    border-radius: 50%; /* Circular image */
+    object-fit: cover; /* To make sure the image covers the area */
+    border: 2px solid #ddd; /* A light border for the image */
+    display: block;
+    margin: 10px 0; /* Adjust margin as necessary */
+}
+
+.business-logo-preview {
+    width: 100px; /* Adjust based on your preference */
+    height: 100px;
+    border-radius: 50%; /* Circular image for consistency with profile picture */
+    object-fit: cover; /* Ensures the image covers the area nicely without distortion */
+    border: 2px solid #ddd; /* Light border for the image */
+    display: block;
+    margin: 10px auto; /* Center the image */
+}
+
 @media (max-width: 768px) {
     .custom-spacing {
-        padding-top: 100px; /* Increase for mobile */
+        padding-top: 100px;
     }
 }
 
@@ -144,5 +263,29 @@ body {
 @media (min-width: 993px) {
     .d-none.d-lg-block {
         display: block !important;
+    }
+}
+
+
+/* Responsive adjustments for smaller devices */
+@media (max-width: 768px) {
+    .page-content {
+        padding-top: 120px; /* Increased top padding for smaller devices */
+    }
+
+    .navbar {
+        padding-bottom: 0; /* Optional: Adjust the navbar padding if needed */
+    }
+}
+
+
+/* Responsive adjustments for smaller devices */
+@media (max-width: 768px) {
+    .page-content {
+        padding-top: 150px; /* Increased top padding for smaller devices */
+    }
+
+    .navbar {
+        padding-bottom: 0px; /* Optional: Adjust the navbar padding if needed */
     }
 }

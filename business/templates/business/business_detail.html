@@ -2,44 +2,25 @@
 {% load static %}
 
 {% block content %}
-<div class="text-center">
-    <h2>Business Details</h2>
-    <div>
-        {% if business.logo %}
-        <img src="{{ business.logo.url }}" class="ProfilePicture" alt="Logo of {{ business.name }}">
-        {% else %}
-        <img src="{% static 'images/default-business.jpg' %}" class="ProfilePicture" alt="Default Business Logo">
-        {% endif %}
+<div class="container page-content">
+    <h2 class="text-center">Business Details</h2>
+    {% if business.logo %}
+    <img src="{{ business.logo.url }}" class="business-logo" alt="Logo of {{ business.name }}">
+    {% else %}
+    <img src="{% static 'images/nobody.jpg' %}" class="business-logo" alt="Default Business Logo">
+    {% endif %}
+    <div class="detail-section">
+        <div><strong>Business Name:</strong> {{ business.name }}</div>
+        <div><strong>Description:</strong> {{ business.description|default:"No description provided." }}</div>
+        <div><strong>Address:</strong> {{ business.address|default:"No address provided." }}</div>
+        <div><strong>Phone Number:</strong> {{ business.phone_number|default:"No phone number provided." }}</div>
+        <div><strong>Email:</strong> {{ business.email|default:"No email provided." }}</div>
+        <div><strong>Website:</strong> {% if business.website %}<a href="{{ business.website }}" target="_blank">{{ business.website }}</a>{% else %}No website provided.{% endif %}</div>
+        <div><strong>Category:</strong> {{ business.category }}</div>
     </div>
-    <div>
-        <strong>Business Name:</strong> {{ business.name }}
-    </div>
-    <div>
-        <strong>Description:</strong> {{ business.description|default:"No description provided." }}
-    </div>
-    <div>
-        <strong>Address:</strong> {{ business.address|default:"No address provided." }}
-    </div>
-    <div>
-        <strong>Phone Number:</strong> {{ business.phone_number|default:"No phone number provided." }}
-    </div>
-    <div>
-        <strong>Email:</strong> {{ business.email|default:"No email provided." }}
-    </div>
-    <div>
-        <strong>Website:</strong>
-        {% if business.website %}
-        <a href="{{ business.website }}" target="_blank">{{ business.website }}</a>
-        {% else %}
-        No website provided.
-        {% endif %}
-    </div>
-
-    <div class="mt-3">
+    <div class="detail-action-buttons">
         <a href="{% url 'edit_business' business.id %}" class="btn btn-primary">Edit Business</a>
-        <a href="{% url 'delete_business' business.id %}" class="btn btn-danger">Delete Business</a>
+        <a href="{% url 'delete_business' business.pk %}" class="btn btn-danger">Delete Business</a>
     </div>
 </div>
-
 {% endblock %}
-

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container page-content">
+    <h2 class="text-center">{% trans "Are you sure you want to delete your profile?" %}</h2>
+    <p class="text-center">This action cannot be undone.</p>
+
+    <div class="text-center">
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">{% trans "Yes, delete my profile" %}</button>
+            <a href="{% url 'profile' %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
