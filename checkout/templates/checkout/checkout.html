@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 page-content">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4 text-center">Finalize Your Booking</h2>
+            <div class="card">
+                <div class="card-header">
+                    Booking Details
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Service: {{ booking.service.name }}</li>
+                    <li class="list-group-item">Date & Time: {{ booking.date|date:"F d, Y H:i" }}</li>
+                    <li class="list-group-item">Duration: {{ booking.duration_hours }} hour(s)</li>
+                    <li class="list-group-item">Price: ${{ booking.service.price }}</li>
+                </ul>
+            </div>
+            <div class="text-center mt-4">
+                <button id="checkout-button" data-service-id="{{ request.session.service_id }}" class="btn btn-primary">Proceed to Payment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    // Function to get CSRF token from the cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Get the CSRF token
+    const csrftoken = getCookie('csrftoken');
+
+    // Event listener for your button
+    document.getElementById('checkout-button').addEventListener('click', function(e) {
+        e.preventDefault();
+        var serviceId = this.getAttribute('data-service-id');
+        var data = { 'service_id': serviceId };
+
+        fetch('/checkout/create/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Use the csrftoken value obtained from the function above
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                if(data.redirect_url) {
+                    window.location.href = data.redirect_url;  // Redirect the user to the provided URL
+                } else {
+                    // Handle errors, e.g., session creation failed
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5 page-content">
+    <h2>Payment Successful</h2>
+    <p>Thank you for your booking. Here are your booking details:</p>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Booking Details</h5>
+            <p class="card-text"><strong>Service:</strong> {{ booking.service.name }}</p>
+            <p class="card-text"><strong>Date & Time:</strong> {{ booking.date|date:"F d, Y H:i" }}</p>
+            <p class="card-text"><strong>Duration:</strong> {{ booking.duration_hours }} hour(s)</p>
+            <p class="card-text"><strong>Price:</strong> ${{ booking.service.price }}</p>
+            <p class="card-text"><strong>Status:</strong> {{ booking.status }}</p>
+            {% if booking.notes %}
+            <p class="card-text"><strong>Notes:</strong> {{ booking.notes }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <a href="{% url '#' %}" class="btn btn-primary mt-3">Go to Dashboard</a>
+</div>
+{% endblock %}

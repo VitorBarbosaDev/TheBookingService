@@ -48,18 +48,8 @@ class UserProfile(models.Model):
 
 
 
-
-
-class Booking(models.Model):
-    customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='customer_bookings')
-    service = models.ForeignKey('services.Service', on_delete=models.CASCADE, related_name='bookings')
-    date = models.DateTimeField()
-    duration_hours = models.IntegerField(default=1, help_text="Duration of the booking in hours for hourly priced services.")
-    status = models.CharField(max_length=50, choices=[('confirmed', 'Confirmed'), ('pending', 'Pending'), ('cancelled', 'Cancelled')])
-    notes = models.TextField(blank=True, null=True)
-
 class Review(models.Model):
-    booking = models.OneToOneField(Booking, on_delete=models.CASCADE, related_name='review')
+    booking = models.OneToOneField('checkout.Booking', on_delete=models.CASCADE, related_name='review')
     rating = models.IntegerField(default=5, choices=[(i, i) for i in range(1, 6)])
     comment = models.TextField(blank=True, null=True)
 

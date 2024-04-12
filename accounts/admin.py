@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, UserProfile, Service, Booking, Review, Category
+from .models import CustomUser, UserProfile, Service, Review, Category
 
 
 class CustomUserAdmin(UserAdmin):
@@ -23,8 +23,7 @@ class ServiceAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', 'price_per_hour', 'min_duration_hours', 'is_active')
 
 
-class BookingAdmin(admin.ModelAdmin):
-    list_display = ['customer', 'service', 'date', 'status']
+
 
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ['booking', 'rating', 'comment']
@@ -37,6 +36,6 @@ class CategoryAdmin(admin.ModelAdmin):
 admin.site.register(UserProfile, UserProfileAdmin)
 
 admin.site.register(Service, ServiceAdmin)
-admin.site.register(Booking, BookingAdmin)
+
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Category, CategoryAdmin)
