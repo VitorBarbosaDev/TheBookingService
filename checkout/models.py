@@ -1,10 +1,12 @@
 from django.db import models
 from django.conf import settings
-from services.models import Service  # Assuming you have a 'services' app
+from services.models import Service
+
 
 class Booking(models.Model):
     STATUS_CHOICES = [
         ('confirmed', 'Confirmed'),
+        ('completed', 'Completed'),
         ('pending', 'Pending'),
         ('cancelled', 'Cancelled'),
     ]

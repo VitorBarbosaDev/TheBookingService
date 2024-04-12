@@ -1,7 +1,7 @@
 body {
     font-family: 'Lato', sans-serif;
     margin: 0;
-    padding-top: 80px; /* Adjust based on nav height */
+    padding-top: 80px;
     background-color: #f4f4f4;
     color: #333;
     line-height: 1.6;
@@ -10,16 +10,16 @@ body {
 /* Navigation bar styling */
 .navbar {
     background-color: #ffffff;
-    padding-bottom: 10px; /* New padding for visual separation */
+    padding-bottom: 10px;
 }
 
 .nav-link {
     color: #555 !important;
-    font-weight: bold; /* Make links bold */
+    font-weight: bold;
 }
 
 .nav-link:hover, .nav-link:focus {
-    color: #007bff !important; /* Adjust for better visibility */
+    color: #007bff !important;
 }
 
 /* Header and logo styling */
@@ -76,36 +76,260 @@ body {
 
 /* Main content enhancements */
 .main-content h1 {
-    font-size: 2.5rem; /* Larger heading for impact */
-    margin-bottom: 1.5rem; /* Space after heading */
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .main-content p {
-    font-size: 1.1rem; /* Slightly larger paragraph */
+    font-size: 1.1rem;
 }
 /* Button enhancements */
 .btn-primary, .btn-black {
-    border-radius: 0; /* Align with theme */
-    padding: 10px 20px; /* Larger clickable area */
-    font-size: 18px; /* Larger text */
+    border-radius: 0;
+    padding: 10px 20px;
+    font-size: 18px;
 }
 
 .btn-primary:hover, .btn-black:hover {
-    opacity: 0.8; /* Subtle hover effect */
+    opacity: 0.8;
 }
 
 /* Utility and responsive adjustments */
 .custom-spacing {
-    padding-top: 2rem; /* Space below navbar */
-    padding-bottom: 2rem; /* Space before footer */
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
 
+.ProfilePicture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    object-fit: cover;
+    margin-top: -75px;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header-spacer {
+    margin-top: 100px;
+}
+
+.page-content {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    padding-top: 80px; /* Default top padding */
+}
+
+.business-details {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.business-details p, .business-details div {
+    margin-bottom: 10px;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.profile-picture, .business-logo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 20px auto;
+}
+
+.detail-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.detail-section strong {
+    color: #333;
+}
+
+.detail-action-buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    height: 38px;
+    box-sizing: border-box;
+}
+
+/* Ensure that both buttons have the same styling */
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Adjustments for button hover states */
+.btn-primary:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+.btn-danger:hover {
+    color: #fff;
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+
+.word-wrap {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+
+.url-wrap {
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+}
+
+.service-img {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+    border-radius: 10px;
+}
+.business-hours, .service-detail > p, .service-detail > h2 {
+    margin-top: 20px;
+}
+.book-btn {
+    margin-top: 20px;
+}
+
+.business-logo-preview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    display: block;
+    margin: 10px auto;
+}
+
+/* General styles for toast */
+.toast {
+    position: relative;
+    min-width: 300px;
+    margin-bottom: 1rem;
+    opacity: 1;
+    background-color: #fff;
+    color: #333;
+}
+
+.toast-header {
+    display: flex;
+    align-items: center;
+    padding: .5rem .75rem;
+    color: #fff;
+}
+
+.toast-body {
+    padding: .75rem 1.25rem;
+}
+
+/* Specific arrow styling */
+.arrow-up {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    position: absolute;
+    top: -20px; /* adjust based on actual usage */
+    right: 20px;
+}
+
+/* Color and background adjustments for different message types */
+.arrow-warning, .bg-warning {
+    border-bottom: 10px solid #ffc107; /* Arrow color for warning */
+    background-color: #ffc107; /* Background color for warning toast */
+}
+
+.arrow-info, .bg-info {
+    border-bottom: 10px solid #17a2b8;
+    background-color: #17a2b8;
+}
+
+.arrow-danger, .bg-danger {
+    border-bottom: 10px solid #dc3545;
+    background-color: #dc3545;
+}
+
+.arrow-success, .bg-success {
+    border-bottom: 10px solid #28a745;
+    background-color: #28a745;
+}
+
+/* Toast capper style */
+.toast-capper {
+    width: 100%;
+    height: 10px;
+}
+
+/* Handling close button styling */
+.close {
+    background: none;
+    border: none;
+    padding: 0;
+    color: inherit;
+}
+
+/* Adjust close button color based on header color */
+.toast-header.bg-white .close {
+    color: #333;
+}
+
+.toast-header:not(.bg-white) .close {
+    color: #fff;
+}
 
 
 @media (max-width: 768px) {
     .custom-spacing {
-        padding-top: 100px; /* Increase for mobile */
+        padding-top: 100px;
     }
 }
 
@@ -119,5 +343,29 @@ body {
 @media (min-width: 993px) {
     .d-none.d-lg-block {
         display: block !important;
+    }
+}
+
+
+/* Responsive adjustments for smaller devices */
+@media (max-width: 768px) {
+    .page-content {
+        padding-top: 120px; /* Increased top padding for smaller devices */
+    }
+
+    .navbar {
+        padding-bottom: 0; /* Optional: Adjust the navbar padding if needed */
+    }
+}
+
+
+/* Responsive adjustments for smaller devices */
+@media (max-width: 768px) {
+    .page-content {
+        padding-top: 150px; /* Increased top padding for smaller devices */
+    }
+
+    .navbar {
+        padding-bottom: 0px; /* Optional: Adjust the navbar padding if needed */
     }
 }

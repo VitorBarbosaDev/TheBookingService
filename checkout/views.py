@@ -82,45 +82,62 @@ def create_checkout_session(request):
 
 
 def checkout_error(request):
-    # Clear any session data if needed
     request.session.pop('checkout_session_id', None)
     request.session.pop('payment_status', None)
-    return render(request, 'checkout/error.html', {'message': 'Payment was not successful.'})
+    request.session.pop('booking_id', None)
+    request.session.pop('transaction_id', None)
+
+    service_id = request.session.get('service_id')  # Retrieving service_id from session
+    if service_id:
+        error_url = reverse('checkout:confirm_booking', args=[service_id])
+    else:
+        error_url = reverse('home')
+
+
+    context = {
+        'error_url': error_url,
+        'message': 'There was a problem processing your payment. Please try again or contact support if the problem persists.'
+    }
+    return render(request, 'checkout/error.html', context)
+
 
 
 
 def checkout_success(request):
 
     if request.session.get('payment_status') == 'Success':
-
         booking_id = request.session.get('booking_id')
         if not booking_id:
             logger.warning("No booking ID found in session.")
-
-            del request.session['checkout_session_id']
-            del request.session['payment_status']
-            return HttpResponseBadRequest("Booking ID is required.")
+            messages.error(request, "Error: Booking ID is missing. Unable to retrieve booking details.")
+            return redirect('checkout:error')
 
         try:
-
             booking = Booking.objects.get(pk=booking_id)
+
+            booking.status = 'confirmed'
+            booking.save()
         except Booking.DoesNotExist:
             logger.error(f"Booking with ID {booking_id} not found.")
-
-            del request.session['checkout_session_id']
-            del request.session['payment_status']
-            return JsonResponse({'error': 'Booking not found'}, status=404)
+            messages.error(request, "Error: No booking found with the provided ID.")
+            return redirect('checkout:error')
 
 
-        del request.session['checkout_session_id']
         del request.session['payment_status']
+        if 'booking_id' in request.session:
+            del request.session['booking_id']
+        if 'checkout_session_id' in request.session:
+            del request.session['checkout_session_id']
+
+
+        messages.success(request, "Booking and payment successful! Thank you for your purchase.")
 
         context = {'booking': booking}
-
-        return render(request, 'checkout/success.html', context)
+        return render(request, 'checkout/checkout_success.html', context)
     else:
+        messages.error(request, "Payment was not successful. Please try again.")
+        return redirect('checkout:error')
 
-        return redirect('checkout')
 
 
 def booking_cancel(request):
@@ -255,11 +272,18 @@ def confirm_booking(request, service_id):
             booking.date = timezone.make_aware(datetime.combine(booking_date, start_time))
             booking.save()
 
+            # Save the booking_id in the session
+            request.session['booking_id'] = booking.pk
+            request.session['service_id'] = service.id
+
             transaction = transaction_form.save(commit=False)
             transaction.booking = booking
             transaction.amount = booking.price
             transaction.transaction_id = f"TXN-{timezone.now().strftime('%Y%m%d%H%M%S')}-{booking.id}"
             transaction.save()
+
+            # Optionally save transaction_id in the session if needed later
+            request.session['transaction_id'] = transaction.transaction_id
 
             try:
                 checkout_session = stripe.checkout.Session.create(
@@ -275,7 +299,7 @@ def confirm_booking(request, service_id):
                         'quantity': 1,
                     }],
                     mode='payment',
-                    success_url = request.build_absolute_uri(reverse('checkout:payment_verification')),
+                    success_url=request.build_absolute_uri(reverse('checkout:payment_verification')),
                     cancel_url=request.build_absolute_uri(reverse('checkout:booking_cancel')),
                 )
                 request.session['checkout_session_id'] = checkout_session.id
@@ -294,6 +318,7 @@ def confirm_booking(request, service_id):
     })
 
     return render(request, 'checkout/confirm_booking.html', context)
+
 
 def calculate_price(service, duration_hours):
     if service.service_type == 'hourly':

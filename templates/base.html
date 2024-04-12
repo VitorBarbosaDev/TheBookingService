@@ -48,7 +48,7 @@
 
 <main role="main" class="container mt-5 pt-5 custom-spacing">
     {% if messages %}
-    <!-- Messages display block -->
+
     <div class="message-container">
         {% for message in messages %}
         {% with message.level as level %}
@@ -76,9 +76,12 @@
 
     {% block postloadjs %}
     <script type="text/javascript">
-        $('.toast').toast('show');
+        $(document).ready(function() {
+            $('.toast').toast('show');
+        });
     </script>
     {% endblock %}
+
 </main>
 
 </body>

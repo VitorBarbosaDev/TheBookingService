@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Error</title>
+</head>
+<body>
+<h1>Payment Error</h1>
+<p>{{ message }}</p>
+<a href="{{ error_url }}">Return to Checkout</a>
+</body>
+{% endblock %}
+
