@@ -47,4 +47,4 @@ class BookingForm(forms.ModelForm):
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
-        fields = ['amount', 'transaction_id']
+        exclude = ['booking','amount', 'transaction_id']

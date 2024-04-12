@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center">Payment Verification</h2>
+            {% if payment_status == 'Success' %}
+            <div class="alert alert-success" role="alert">
+                Thank you for your payment. Your transaction has been successfully processed.
+                <br>
+                <a href="{% url 'booking_success' %}" class="btn btn-primary mt-3">View Booking Details</a>
+            </div>
+            {% elif payment_status == 'Failure' %}
+            <div class="alert alert-danger" role="alert">
+                Sorry, there was a problem processing your payment. Please try again.
+                <br>
+                <a href="{% url 'checkout' %}" class="btn btn-danger mt-3">Return to Checkout</a>
+            </div>
+            {% else %}
+            <div class="alert alert-warning" role="alert">
+                Payment status is unclear. Please contact support if you need assistance.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
