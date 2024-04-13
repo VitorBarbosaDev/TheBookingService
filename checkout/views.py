@@ -47,47 +47,60 @@ def create_checkout_session(request):
         logger.error(f"Service with ID {service_id} not found.")
         return JsonResponse({'error': 'Service not found'}, status=404)
 
-    # Determine the unit_amount based on service type
+
+
     if service.service_type == 'fixed' and service.price is not None:
-        unit_amount = int(service.price * 100)  # Convert to cents
+        unit_amount = int(service.price * 100)
     elif service.service_type == 'hourly' and service.price_per_hour is not None:
-        unit_amount = int(service.price_per_hour * 100)  # Convert to cents
+        unit_amount = int(service.price_per_hour * 100)
     else:
         logger.error(f"Appropriate price for service ID {service_id} is not set.")
         return JsonResponse({'error': 'Appropriate price is not set for this service type'}, status=400)
 
-    try:
-        # Create the Stripe checkout session with dynamic unit_amount
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=[{
-                'price_data': {
-                    'currency': 'usd',
-                    'product_data': {
-                        'name': service.name,
-                    },
-                    'unit_amount': unit_amount,
-                },
-                'quantity': 1,
-            }],
-            mode='payment',
-            success_url=request.build_absolute_uri('/checkout/success/'),
-            cancel_url=request.build_absolute_uri('/checkout/cancel/'),
-        )
+    form = BookingForm(request.POST, user=request.user)
+    if form.is_valid():
+        booking = form.save(commit=False)
+        booking.service = service
+        booking.status = 'pending'  # Default status
+        booking.save()
 
-        booking = Booking(
-                    service=service,
-                    customer=request.user,
-                    date=timezone.now(),
-                    price=service.price,
-                    status='pending',
-                    payment_intent_id=checkout_session.payment_intent
+        try:
+
+                checkout_session = stripe.checkout.Session.create(
+                    payment_method_types=['card'],
+                    line_items=[{
+                        'price_data': {
+                            'currency': 'usd',
+                            'product_data': {
+                                'name': service.name,
+                            },
+                            'unit_amount': unit_amount,
+                        },
+                        'quantity': 1,
+                    }],
+                    mode='payment',
+                    success_url=request.build_absolute_uri('/checkout/success/'),
+                    cancel_url=request.build_absolute_uri('/checkout/cancel/'),
                 )
 
-        return JsonResponse({'redirect_url': checkout_session.url})
-    except Exception as e:
-        logger.exception("Error creating Stripe checkout session: ", exc_info=e)
-        return JsonResponse({'error': str(e)}, status=500)
+                booking = Booking(
+                            service=service,
+                            customer=request.user,
+                            date=timezone.now(),
+                            price=service.price,
+                            status='pending',
+                            payment_intent_id=checkout_session.payment_intent
+                        )
+
+                return JsonResponse({'redirect_url': checkout_session.url})
+        except Exception as e:
+            logger.exception("Error creating Stripe checkout session: ", exc_info=e)
+            return JsonResponse({'error': str(e)}, status=500)
+
+    else:
+        return JsonResponse({'error': 'Invalid form data'}, status=400)
+
+
 
 
 def checkout_error(request):
@@ -391,11 +404,20 @@ def stripe_webhook(request):
     if event['type'] == 'payment_intent.succeeded':
         payment_intent = event['data']['object']
         try:
-
             booking = Booking.objects.get(payment_intent_id=payment_intent['id'])
             booking.status = 'confirmed'
             booking.save()
-            logger.info(f"Booking {booking.id} confirmed after successful payment.")
+
+
+            send_mail(
+                'Booking Confirmation',
+                f'Your booking for {booking.service.name} on {booking.date} has been confirmed. Thank you for your payment.',
+                settings.DEFAULT_FROM_EMAIL,
+                [booking.customer.email],
+                fail_silently=False,
+            )
+
+            logger.info(f"Booking {booking.id} confirmed and customer notified.")
         except Booking.DoesNotExist:
             logger.error(f"Booking with payment intent ID {payment_intent['id']} not found.")
             return HttpResponse(status=404)

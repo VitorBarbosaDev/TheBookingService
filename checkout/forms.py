@@ -6,10 +6,11 @@ from django_countries.widgets import CountrySelectWidget
 
 class BookingForm(forms.ModelForm):
     start_time = forms.ChoiceField(choices=[])
-
+    email = forms.EmailField(required=True)
     class Meta:
         model = Booking
-        fields = ['start_time', 'duration_hours', 'notes', 'first_name', 'last_name', 'phone_number', 'default_country', 'default_county', 'default_postcode', 'default_town_or_city', 'default_street_address1', 'default_street_address2']
+        fields = ['start_time', 'duration_hours', 'notes', 'email', 'first_name', 'last_name', 'phone_number', 'default_country', 'default_county', 'default_postcode', 'default_town_or_city', 'default_street_address1', 'default_street_address2']
+
 
     def __init__(self, *args, **kwargs):
         slots = kwargs.pop('slots', [])
@@ -21,6 +22,7 @@ class BookingForm(forms.ModelForm):
                 user_profile = user.userprofile
                 self.fields['first_name'].initial = user.first_name
                 self.fields['last_name'].initial = user.last_name
+                self.fields['email'].initial = user.email
                 self.fields['phone_number'].initial = user_profile.default_phone_number
                 self.fields['default_street_address1'].initial = user_profile.default_street_address1
                 self.fields['default_street_address2'].initial = user_profile.default_street_address2
@@ -31,7 +33,7 @@ class BookingForm(forms.ModelForm):
             except UserProfile.DoesNotExist:
 
                   pass
-    # Added billing details fields
+
     first_name = forms.CharField(required=True, max_length=100)
     last_name = forms.CharField(required=True, max_length=100)
     phone_number = forms.CharField(required=True, max_length=20)
