@@ -9,6 +9,7 @@ from django.utils.text import slugify
 
 class CustomUser(AbstractUser):
     is_business_owner = models.BooleanField(default=False)
+    is_guest = models.BooleanField(default=False)
 
 
 

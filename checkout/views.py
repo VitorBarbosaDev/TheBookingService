@@ -16,6 +16,7 @@ from django.urls import reverse
 import stripe
 from django.contrib import messages
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 
 
 # Set up logging
@@ -192,7 +193,7 @@ def booking_cancel(request):
     else:
         messages.error(request, "No active booking found to cancel.")
 
-    return render(request, 'booking_cancel.html', {
+    return render(request, 'checkout/booking_cancel.html', {
         'message': 'Your booking cancellation process has been handled.'
     })
 
@@ -292,6 +293,22 @@ def confirm_booking(request, service_id):
             slot_time = booking_form.cleaned_data['start_time']
             start_time = datetime.strptime(slot_time.split(' - ')[0], '%H:%M').time()
             booking.date = timezone.make_aware(datetime.combine(booking_date, start_time))
+            if request.user.is_authenticated:
+                        booking.customer = request.user
+            else:
+
+                guest_user = get_user_model().objects.create_user(
+                    username=f"guest_{timezone.now().strftime('%Y%m%d%H%M%S')}",
+                    email=booking_form.cleaned_data['email'],
+                    first_name=booking_form.cleaned_data['first_name'],
+                    last_name=booking_form.cleaned_data['last_name'],
+                    is_business_owner=False,
+                    password=None,
+                    is_guest=True
+                )
+                guest_user.save()
+                booking.customer = guest_user
+
             booking.save()
 
             # Save the booking_id in the session
