@@ -1,7 +1,7 @@
 import json
 import stripe
 from django.conf import settings
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest , HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from .models import Booking , Transaction
@@ -74,6 +74,15 @@ def create_checkout_session(request):
             success_url=request.build_absolute_uri('/checkout/success/'),
             cancel_url=request.build_absolute_uri('/checkout/cancel/'),
         )
+
+        booking = Booking(
+                    service=service,
+                    customer=request.user,
+                    date=timezone.now(),
+                    price=service.price,
+                    status='pending',
+                    payment_intent_id=checkout_session.payment_intent
+                )
 
         return JsonResponse({'redirect_url': checkout_session.url})
     except Exception as e:
@@ -282,7 +291,7 @@ def confirm_booking(request, service_id):
             transaction.transaction_id = f"TXN-{timezone.now().strftime('%Y%m%d%H%M%S')}-{booking.id}"
             transaction.save()
 
-            # Optionally save transaction_id in the session if needed later
+
             request.session['transaction_id'] = transaction.transaction_id
 
             try:
@@ -359,3 +368,38 @@ def payment_verification(request):
 
         del request.session['checkout_session_id']
         return redirect('checkout:error')
+
+
+@csrf_exempt
+def stripe_webhook(request):
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+        )
+    except ValueError as e:
+
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+
+        return HttpResponse(status=400)
+
+
+    if event['type'] == 'payment_intent.succeeded':
+        payment_intent = event['data']['object']
+        try:
+
+            booking = Booking.objects.get(payment_intent_id=payment_intent['id'])
+            booking.status = 'confirmed'
+            booking.save()
+            logger.info(f"Booking {booking.id} confirmed after successful payment.")
+        except Booking.DoesNotExist:
+            logger.error(f"Booking with payment intent ID {payment_intent['id']} not found.")
+            return HttpResponse(status=404)
+
+
+    return HttpResponse(status=200)
+

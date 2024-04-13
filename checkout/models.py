@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from services.models import Service
-
+from django.utils import timezone
 
 class Booking(models.Model):
     STATUS_CHOICES = [
@@ -13,6 +13,7 @@ class Booking(models.Model):
 
     customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='customer_bookings')
     service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='bookings')
+    payment_intent_id = models.CharField(max_length=255, blank=True, null=True)
     date = models.DateTimeField()
     duration_hours = models.IntegerField(default=1, help_text="Duration of the booking in hours.")
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -21,6 +22,15 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"Booking {self.pk} for {self.service.name}"
+
+    def is_eligible_for_completion(self):
+            """Check if the booking date has passed and status is confirmed."""
+            return self.date < timezone.now() and self.status == 'confirmed'
+
+    def mark_completed(self):
+            """Mark the booking as completed."""
+            self.status = 'completed'
+            self.save()
 
 
 

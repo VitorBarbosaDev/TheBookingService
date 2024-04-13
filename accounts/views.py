@@ -5,7 +5,7 @@ from .models import  UserProfile
 from business.models import Business
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
+from checkout.models import Booking
 def custom_signup_view(request):
     account_type = request.GET.get('type', 'personal')
 
@@ -75,3 +75,24 @@ def delete_profile_view(request):
         messages.success(request, 'Your account has been deleted successfully.')
         return redirect('home')
     return render(request, 'accounts/delete_profile.html')
+
+
+@login_required
+def bookings_view(request):
+    user = request.user
+    if hasattr(user, 'business'):
+        if request.method == 'POST':
+            booking_id = request.POST.get('booking_id')
+            booking = Booking.objects.get(id=booking_id, service__business=user.business)
+            if booking.is_eligible_for_completion():
+                booking.mark_completed()
+                messages.success(request, "Booking has been marked as completed.")
+            return redirect('bookings_view')
+
+        bookings = Booking.objects.filter(service__business=user.business).order_by('-date')
+        context = {'bookings': bookings, 'user_type': 'business'}
+    else:
+        bookings = Booking.objects.filter(customer=user).order_by('-date')
+        context = {'bookings': bookings, 'user_type': 'personal'}
+
+    return render(request, 'accounts/bookings.html', context)

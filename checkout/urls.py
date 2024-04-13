@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import stripe_webhook
 
 app_name = 'checkout'
 
@@ -10,4 +11,5 @@ urlpatterns = [
     path('error/', views.checkout_error, name='error'),
     path('booking/cancel/', views.booking_cancel, name='booking_cancel'),
     path('payment_verification/', views.payment_verification, name='payment_verification'),
+    path('webhook/stripe/', stripe_webhook, name='stripe-webhook'),
 ]
