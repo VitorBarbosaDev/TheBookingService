@@ -383,21 +383,24 @@ def payment_verification(request):
         return redirect('checkout:error')
 
 
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
 @csrf_exempt
 def stripe_webhook(request):
     payload = request.body
-    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE', '')
     event = None
 
     try:
         event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+            payload, sig_header, settings.STRIPE_WH_SECRET
         )
     except ValueError as e:
-
+        logger.error(f'Invalid payload: {str(e)}')
         return HttpResponse(status=400)
     except stripe.error.SignatureVerificationError as e:
-
+        logger.error(f'Invalid signature: {str(e)}')
         return HttpResponse(status=400)
 
 
@@ -411,17 +414,17 @@ def stripe_webhook(request):
 
             send_mail(
                 'Booking Confirmation',
-                f'Your booking for {booking.service.name} on {booking.date} has been confirmed. Thank you for your payment.',
+                f'Your booking for {booking.service.name} on {booking.date.strftime("%Y-%m-%d at %H:%M")} has been confirmed. Thank you for your payment.',
                 settings.DEFAULT_FROM_EMAIL,
                 [booking.customer.email],
                 fail_silently=False,
             )
-
-            logger.info(f"Booking {booking.id} confirmed and customer notified.")
+            logger.info(f"Booking {booking.id} confirmed and customer notified via email.")
         except Booking.DoesNotExist:
-            logger.error(f"Booking with payment intent ID {payment_intent['id']} not found.")
+            logger.error(f'Booking with payment intent ID {payment_intent["id"]} not found.')
             return HttpResponse(status=404)
-
+    else:
+        logger.info(f'Unhandled event type {event["type"]}')
 
     return HttpResponse(status=200)
 
