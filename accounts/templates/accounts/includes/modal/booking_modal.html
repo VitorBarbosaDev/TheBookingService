@@ -1,0 +1,30 @@
+<!-- Modal for booking details -->
+<div class="modal fade" id="modal{{ booking.id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel{{ booking.id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel{{ booking.id }}">{{ booking.service.name }} Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Date & Time:</strong> {{ booking.date|date:"M d, Y H:i" }}</p>
+                <p><strong>Duration:</strong> {{ booking.duration_hours }} hour(s)</p>
+                <p><strong>Status:</strong> {{ booking.get_status_display }}</p>
+                <p><strong>Price:</strong> ${{ booking.price }}</p>
+                <p><strong>Notes:</strong> {{ booking.notes|default:"No additional notes" }}</p>
+                {% if booking.is_eligible_for_completion %}
+                <form method="post" action="{% url 'bookings' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="booking_id" value="{{ booking.id }}">
+                    <button type="submit" class="btn btn-success">Confirm Completion</button>
+                </form>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

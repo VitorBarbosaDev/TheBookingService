@@ -32,3 +32,13 @@ H
 booking_platform/urls.py,7/9/79a418623b82a0de45796db8ebcdf34944ae397b
 X
 (accounts/templates/accounts/profile.html,c/8/c88f36693b5d006021612a2e5ca6f2b03c6f1d14
+_
+/accounts/templates/accounts/delete_profile.html,b/9/b9523d04a4b30e649c86c5bf1f95356b4d47a4f5
+m
+=accounts/templates/accounts/includes/modal/booking_modal.html,5/5/556498a34e6a3b3000858a8f093aec169cb15a6a
+\
+,services/templates/services/my_services.html,4/3/4393b978db6a9b68d87cc5a9cebe2fe85fe8f508
+C
+templates/base.html,d/a/da7c237b85a69c00a9ab8c189bf63e22070fcac3
+N
+home/templates/home/index.html,a/4/a455900950966c4a8b5c5bee3780661c825b89ed

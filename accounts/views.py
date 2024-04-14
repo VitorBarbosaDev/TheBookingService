@@ -82,32 +82,23 @@ def delete_profile_view(request):
 @login_required
 def bookings_view(request):
     user = request.user
+    context = {'user_type': 'business' if hasattr(user, 'business') else 'personal'}
+
+
     if hasattr(user, 'business'):
-
-        queryset = Booking.objects.filter(service__business=user.business)
-        user_type = 'business'
-    else:
-
-        queryset = Booking.objects.filter(customer=user)
-        user_type = 'personal'
-
-
-    status = request.GET.get('status')
-    if status:
-        queryset = queryset.filter(status=status)
+        received_query = Booking.objects.filter(service__business=user.business)
+        status_received = request.GET.get('status_received')
+        if status_received:
+            received_query = received_query.filter(status=status_received)
+        received_paginator = Paginator(received_query, 10)
+        context['page_obj_received'] = received_paginator.get_page(request.GET.get('page_received', 1))
 
 
-    if request.method == 'POST' and user_type == 'business':
-        booking_id = request.POST.get('booking_id')
-        booking = queryset.get(id=booking_id)
-        if booking.is_eligible_for_completion():
-            booking.mark_completed()
-            messages.success(request, "Booking has been marked as completed.")
-        return redirect('bookings_view')
+    made_query = Booking.objects.filter(customer=user)
+    status_made = request.GET.get('status_made')
+    if status_made:
+        made_query = made_query.filter(status=status_made)
+    made_paginator = Paginator(made_query, 10)
+    context['page_obj_made'] = made_paginator.get_page(request.GET.get('page_made', 1))
 
-    # Pagination setup
-    paginator = Paginator(queryset, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    return render(request, 'accounts/bookings.html', {'page_obj': page_obj, 'user_type': user_type})
+    return render(request, 'accounts/bookings.html', context)
