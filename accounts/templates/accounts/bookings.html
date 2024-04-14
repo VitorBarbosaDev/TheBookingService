@@ -1,13 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-4">
+<div class="container mt-4 page-content">
     <h1>Your Bookings</h1>
     {% if user_type == 'business' %}
     <h2>Bookings Received</h2>
     {% endif %}
 
+    <form method="get" class="form-inline mb-3">
+        <label for="statusFilter" class="mr-2">Filter by status:</label>
+        <select id="statusFilter" name="status" class="form-control mr-2">
+            <option value="">All</option>
+            <option value="confirmed" {% if request.GET.status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+            <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>Pending</option>
+            <option value="cancelled" {% if request.GET.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+            <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>Completed</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+
     <div class="list-group">
-        {% for booking in bookings %}
+        {% for booking in page_obj %}
 
         <div class="list-group-item flex-column align-items-start" style="cursor: pointer;" data-toggle="modal" data-target="#modal{{ booking.id }}">
             <div class="d-flex w-100 justify-content-between">
@@ -36,7 +48,7 @@
                         <p><strong>Price:</strong> ${{ booking.price }}</p>
                         <p><strong>Notes:</strong> {{ booking.notes|default:"No additional notes" }}</p>
                         {% if booking.is_eligible_for_completion %}
-                        <form method="post" action="{% url 'bookings_view' %}">
+                        <form method="post" action="{% url 'bookings' %}">
                             {% csrf_token %}
                             <input type="hidden" name="booking_id" value="{{ booking.id }}">
                             <button type="submit" class="btn btn-success">Confirm Completion</button>
@@ -53,5 +65,20 @@
         <p>No bookings found.</p>
         {% endfor %}
     </div>
+
+    <!-- Pagination Controls -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
 </div>
 {% endblock %}

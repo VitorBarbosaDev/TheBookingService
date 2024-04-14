@@ -6,6 +6,8 @@ from business.models import Business
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from checkout.models import Booking
+from django.core.paginator import Paginator
+
 def custom_signup_view(request):
     account_type = request.GET.get('type', 'personal')
 
@@ -81,18 +83,31 @@ def delete_profile_view(request):
 def bookings_view(request):
     user = request.user
     if hasattr(user, 'business'):
-        if request.method == 'POST':
-            booking_id = request.POST.get('booking_id')
-            booking = Booking.objects.get(id=booking_id, service__business=user.business)
-            if booking.is_eligible_for_completion():
-                booking.mark_completed()
-                messages.success(request, "Booking has been marked as completed.")
-            return redirect('bookings_view')
 
-        bookings = Booking.objects.filter(service__business=user.business).order_by('-date')
-        context = {'bookings': bookings, 'user_type': 'business'}
+        queryset = Booking.objects.filter(service__business=user.business)
+        user_type = 'business'
     else:
-        bookings = Booking.objects.filter(customer=user).order_by('-date')
-        context = {'bookings': bookings, 'user_type': 'personal'}
 
-    return render(request, 'accounts/bookings.html', context)
+        queryset = Booking.objects.filter(customer=user)
+        user_type = 'personal'
+
+
+    status = request.GET.get('status')
+    if status:
+        queryset = queryset.filter(status=status)
+
+
+    if request.method == 'POST' and user_type == 'business':
+        booking_id = request.POST.get('booking_id')
+        booking = queryset.get(id=booking_id)
+        if booking.is_eligible_for_completion():
+            booking.mark_completed()
+            messages.success(request, "Booking has been marked as completed.")
+        return redirect('bookings_view')
+
+    # Pagination setup
+    paginator = Paginator(queryset, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'accounts/bookings.html', {'page_obj': page_obj, 'user_type': user_type})

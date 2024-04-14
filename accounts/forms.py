@@ -38,6 +38,7 @@ class CustomSignupForm(SignupForm):
         user.save()
 
         profile_pic = self.cleaned_data.get('profile_picture')
+        profile_pic_url = None
         if profile_pic:
             upload_result = upload(profile_pic)
             profile_pic_url = upload_result.get('url')  # Properly define profile_pic_url here
