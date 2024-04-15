@@ -9,8 +9,8 @@
                 <img src="{% if service.image %}{{ service.image.url }}{% else %}{% static 'images/nobody.jpg' %}{% endif %}" alt="{{ service.name }}" class="service-img mb-3">
 
                 <h2>{{ service.name }}</h2>
-                <p>Business: {{ service.business }}</p>
-                <p>Category: {{ service.category }}</p>
+                <p><strong>Business:</strong> <a href="{% url 'business:business_detail' service.business.pk %}">{{ service.business.name }}</a></p>
+                <p><strong>Category:</strong> {{ service.category }}</p>
                 <p>{{ service.description }}</p>
                 <p>
                     {% if service.service_type == 'fixed' %}
@@ -34,18 +34,23 @@
                     {% endfor %}
                 </div>
 
-
-                {% if business_hours_qs %}
+                {% if request.user != service.business.owner %}
                 <div class="text-center mt-4">
                     <a href="{% url 'checkout:confirm_booking' service.id %}" class="btn btn-primary">Book Now</a>
                 </div>
                 {% endif %}
+
+                <div class="mt-4">
+                    <a href="{% url 'business:business_detail' service.business.pk %}" class="btn btn-secondary">View Business</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 {% endblock %}
+
+
 
 
 

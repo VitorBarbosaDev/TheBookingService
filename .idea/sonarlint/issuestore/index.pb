@@ -74,3 +74,5 @@ U
 %templates/allauth/account/signup.html,6/7/67a0ee7c0c448d583ac3c5854f2e6bc1e8181d1c
 A
 business/forms.py,9/d/9d491949dd7401a123621e91784c90fb0f8186e1
+_
+/services/templates/services/service_detail.html,4/0/4026e7f71f137ff6e59bc91e41b98dfe3c1bac98

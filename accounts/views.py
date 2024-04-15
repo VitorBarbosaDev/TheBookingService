@@ -90,7 +90,7 @@ def bookings_view(request):
         status_received = request.GET.get('status_received')
         if status_received:
             received_query = received_query.filter(status=status_received)
-        received_paginator = Paginator(received_query, 10)
+        received_paginator = Paginator(received_query, 6)
         context['page_obj_received'] = received_paginator.get_page(request.GET.get('page_received', 1))
 
 
@@ -98,7 +98,7 @@ def bookings_view(request):
     status_made = request.GET.get('status_made')
     if status_made:
         made_query = made_query.filter(status=status_made)
-    made_paginator = Paginator(made_query, 10)
+    made_paginator = Paginator(made_query, 6)
     context['page_obj_made'] = made_paginator.get_page(request.GET.get('page_made', 1))
 
     return render(request, 'accounts/bookings.html', context)

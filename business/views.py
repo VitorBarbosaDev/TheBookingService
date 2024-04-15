@@ -16,9 +16,14 @@ def business_detail(request, pk=None):
             messages.error(request, "Business profile not found.")
             return redirect('home')
 
-    context = {'business': business}
-    return render(request, 'business/business_detail.html', context)
+    # Fetch business hours
+    business_hours_list = BusinessHours.objects.filter(business=business).order_by('day')  # Ordering by day might require a custom sorting method if not using integer day representation
 
+    context = {
+        'business': business,
+        'business_hours_list': business_hours_list
+    }
+    return render(request, 'business/business_detail.html', context)
 
 @login_required
 def edit_business(request, pk):
