@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
-{% load static %}  <!-- Load if you're using static files -->
+{% load static %}
 
 {% block content %}
 <h2>Services</h2>
 <form method="get" class="mb-4 page-content">
     <div class="input-group mb-3">
-        <input type="text" name="q" placeholder="Search services..." class="form-control">
+        <input type="text" name="q" placeholder="Search services or businesses..." class="form-control">
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="submit">Search</button>
         </div>
@@ -33,8 +33,22 @@
         </div>
     </div>
     {% empty %}
-    <div class="col-12">
-        <p class="text-center">No services found in this category.</p>
+    <p class="text-center">No services found in this category.</p>
+    {% endfor %}
+
+    <!-- Additionally showing businesses if searched -->
+    {% for business in businesses %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            {% if business.logo %}
+            <img src="{{ business.logo.url }}" class="card-img-top" alt="{{ business.name }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ business.name }}</h5>
+                <p class="card-text">{{ business.description|truncatewords:20 }}</p>
+                <a href="{% url 'business:business_detail' business.id %}" class="btn btn-primary">Visit Business</a>
+            </div>
+        </div>
     </div>
     {% endfor %}
 </div>

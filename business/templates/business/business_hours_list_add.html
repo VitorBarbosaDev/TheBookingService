@@ -12,7 +12,7 @@
     <h3>Current Business Hours</h3>
     <ul>
         {% for hours in business_hours_list %}
-        <li>{{ hours.day }}: {{ hours.open_time|date:"P" }} - {{ hours.close_time|date:"P" }} <a href="{% url 'edit_business_hours' hours.id %}">Edit</a> <a href="{% url 'delete_business_hours' hours.id %}">Delete</a></li>
+        <li>{{ hours.day }}: {{ hours.open_time|date:"P" }} - {{ hours.close_time|date:"P" }} <a href="{% url 'business:edit_business_hours' hours.id %}">Edit</a> <a href="{% url 'business:delete_business_hours' hours.id %}">Delete</a></li>
         {% empty %}
         <li>No business hours set.</li>
         {% endfor %}

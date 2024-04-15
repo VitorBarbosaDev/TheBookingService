@@ -2,15 +2,20 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Business, BusinessHours
-from .forms import BusinessHoursForm
+from .forms import BusinessForm, BusinessHoursForm
 
 @login_required
-def business_detail(request):
-    try:
-        business = Business.objects.get(owner=request.user)
-    except Business.DoesNotExist:
-        messages.error(request, "Business profile not found.")
-        return redirect('home')
+def business_detail(request, pk=None):
+    business = None
+    if pk:
+        business = get_object_or_404(Business, pk=pk)
+    else:
+        try:
+            business = Business.objects.get(owner=request.user)
+        except Business.DoesNotExist:
+            messages.error(request, "Business profile not found.")
+            return redirect('home')
+
     context = {'business': business}
     return render(request, 'business/business_detail.html', context)
 
@@ -23,7 +28,7 @@ def edit_business(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Your business profile has been updated.')
-            return redirect('business_detail')
+            return redirect('business:business_detail')
     else:
         form = BusinessForm(instance=business)
     return render(request, 'business/edit_business.html', {'form': form, 'business': business})
@@ -37,7 +42,7 @@ def delete_business(request, pk):
     if request.method == 'POST':
         business.delete()
         messages.success(request, 'Your business profile has been deleted.')
-        return redirect('some_safe_url')  # Redirect to a safe URL
+        return redirect('home')
     return render(request, 'business/delete_business.html', {'business': business})
 
 
@@ -52,7 +57,7 @@ def business_hours_list_add(request, business_id):
             business_hours.business = business
             business_hours.save()
             messages.success(request, 'Business hours added successfully.')
-            return redirect('business_hours_list_add', business_id=business.id)
+            return redirect('business:business_hours_list_add', business_id=business.id)
     else:
         form = BusinessHoursForm()
     business_hours_list = BusinessHours.objects.filter(business=business)
@@ -67,7 +72,7 @@ def edit_business_hours(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, "Business hours updated successfully.")
-            return redirect('business_hours_list_add', business_id=business_hour.business.id)
+            return redirect('business:business_hours_list_add', business_id=business_hour.business.id)
     else:
         form = BusinessHoursForm(instance=business_hour)
     return render(request, 'business/edit_business_hours.html', {'form': form})
@@ -79,5 +84,5 @@ def delete_business_hours(request, pk):
         business_id = business_hour.business.id
         business_hour.delete()
         messages.success(request, "Business hours deleted successfully.")
-        return redirect('business_hours_list_add', business_id=business_id)
+        return redirect('business:business_hours_list_add', business_id=business_id)
     return render(request, 'business/delete_business_hours.html', {'business_hour': business_hour})

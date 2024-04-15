@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic.detail import DetailView
 from accounts.models import Category
-from business.models import BusinessHours
+from business.models import BusinessHours , Business
 import logging
 
 class ServiceListView(ListView):
@@ -89,20 +89,27 @@ class ServiceDeleteView(DeleteView):
 
 def service_list(request):
     query = request.GET.get('q')
+    context = {}
+
     if query:
-        services_list = Service.objects.filter(name__icontains=query)
+        services_list = Service.objects.filter(name__icontains=query) | Service.objects.filter(description__icontains=query)
+        businesses_list = Business.objects.filter(name__icontains=query) | Business.objects.filter(description__icontains=query)
     else:
         services_list = Service.objects.all()
+        businesses_list = Business.objects.none()
 
-    # Pagination
-    paginator = Paginator(services_list, 6)  # Show 6 services per page
+
+    service_paginator = Paginator(services_list, 6)
     page = request.GET.get('page')
     try:
-        services = paginator.page(page)
+        services = service_paginator.page(page)
     except PageNotAnInteger:
-        services = paginator.page(1)
+        services = service_paginator.page(1)
     except EmptyPage:
-        services = paginator.page(paginator.num_pages)
+        services = service_paginator.page(service_paginator.num_pages)
 
-    return render(request, 'services/service_list.html', {'services': services})
 
+    context['services'] = services
+    context['businesses'] = businesses_list
+
+    return render(request, 'services/service_list.html', context)

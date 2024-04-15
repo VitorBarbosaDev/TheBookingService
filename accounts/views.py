@@ -30,11 +30,11 @@ def custom_signup_view(request):
                         logo=form.cleaned_data.get('logo', None),
                     )
                     messages.success(request, "Your business account has been successfully created!")
-                    return redirect('business_dashboard_url')
+                    return redirect('profile')
                 else:
                     UserProfile.objects.create(user=user)
                     messages.success(request, "Your personal account has been successfully created!")
-                    return redirect('some_personal_success_url')
+                    return redirect('profile')
             except Exception as e:
                 messages.error(request, "An error occurred during account creation. Please try again.")
     else:

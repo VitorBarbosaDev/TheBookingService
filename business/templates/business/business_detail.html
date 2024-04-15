@@ -17,11 +17,33 @@
         <div><strong>Email:</strong> {{ business.email|default:"No email provided." }}</div>
         <div><strong>Website:</strong> {% if business.website %}<a href="{{ business.website }}" target="_blank">{{ business.website }}</a>{% else %}No website provided.{% endif %}</div>
         <div><strong>Category:</strong> {{ business.category }}</div>
+<div><strong>Services:</strong>
+            <ul>
+                {% for service in business.services.all %}
+                <li>{{ service.name }}</li>
+                {% empty %}
+                <li>No services provided.</li>
+                {% endfor %}
+            </ul>
+</div>
+        <div><strong>Hours:</strong>
+            <ul>
+                {% for hours in business_hours_list %}
+                <li>{{ hours.day }}: {{ hours.open_time|date:"P" }} - {{ hours.close_time|date:"P" }} <a href="{% url 'business:edit_business_hours' hours.id %}">Edit</a> <a href="{% url 'business:delete_business_hours' hours.id %}">Delete</a></li>
+                {% empty %}
+                <li>No business hours set.</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
+
+
+    {% if request.user == business.owner %}
     <div class="detail-action-buttons">
-        <a href="{% url 'edit_business' business.id %}" class="btn btn-primary">Edit Business</a>
-        <a href="{% url 'delete_business' business.pk %}" class="btn btn-danger">Delete Business</a>
-        <a href="{% url 'business_hours_list_add' business.id %}" class="btn btn-info">View Business Hours</a>
+        <a href="{% url 'business:edit_business' business.id %}" class="btn btn-primary">Edit Business</a>
+        <a href="{% url 'business:delete_business' business.pk %}" class="btn btn-danger">Delete Business</a>
+        <a href="{% url 'business:business_hours_list_add' business.id %}" class="btn btn-info">View Business Hours</a>
     </div>
+    {% endif %}
 </div>
 {% endblock %}
