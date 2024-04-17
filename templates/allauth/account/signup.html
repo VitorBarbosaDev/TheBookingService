@@ -1,42 +1,42 @@
-{% extends "account/base.html" %}
-
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% load i18n %}
 
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 
 {% block content %}
 <div class="container mt-5 page-content">
-<h1>{% trans "Sign Up" %}</h1>
-<ul class="nav nav-tabs" id="signupTab" role="tablist">
-  <li class="nav-item">
-    <a class="nav-link active" id="personal-tab" data-toggle="tab" href="#personal" role="tab" aria-controls="personal" aria-selected="true">Personal</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" id="business-tab" data-toggle="tab" href="#business" role="tab" aria-controls="business" aria-selected="false">Business</a>
-  </li>
-</ul>
+    <h1>{% trans "Sign Up" %}</h1>
+    <ul class="nav nav-tabs" id="signupTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="personal-tab" data-toggle="tab" href="#personal" role="tab" aria-controls="personal" aria-selected="true">Personal</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="business-tab" data-toggle="tab" href="#business" role="tab" aria-controls="business" aria-selected="false">Business</a>
+        </li>
+    </ul>
 
-<div class="tab-content" id="signupTabContent">
-  <div class="tab-pane fade show active" id="personal" role="tabpanel" aria-labelledby="personal-tab">
-    <h3 class="mt-3">Personal Account</h3>
-    <form id="personal_form" method="post" action="{% url 'account_signup' %}?type=personal" enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ form|crispy }}
-      <button type="submit" class="btn btn-primary mt-3">{% trans "Sign Up" %}</button>
-    </form>
-  </div>
+    <div class="tab-content" id="signupTabContent">
+        <div class="tab-pane fade show active" id="personal" role="tabpanel" aria-labelledby="personal-tab">
+            <h3 class="mt-3">Personal Account</h3>
+            <form id="personal_form" method="post" action="{% url 'account_signup' %}?type=personal" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-primary mt-3">{% trans "Sign Up" %}</button>
+            </form>
+        </div>
 
-<div class="tab-pane fade" id="business" role="tabpanel" aria-labelledby="business-tab">
-  <h3 class="mt-3">Business Account</h3>
-  <div class="business-fields" style="display: none;">
-    <form id="business_form" method="post" action="{% url 'account_signup' %}?type=business" enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ form|crispy }}
-      <button type="submit" class="btn btn-primary mt-3">{% trans "Sign Up" %}</button>
-    </form>
-  </div>
-</div>
-</div>
+        <div class="tab-pane fade" id="business" role="tabpanel" aria-labelledby="business-tab">
+            <h3 class="mt-3">Business Account</h3>
+            <div class="business-fields" style="display: none;">
+                <form id="business_form" method="post" action="{% url 'account_signup' %}?type=business" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary mt-3">{% trans "Sign Up" %}</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
@@ -44,64 +44,64 @@
 
 {% block extra_js %}
 <script>
-  $(document).ready(function() {
-    // Toggle visibility based on the selected tab
-    $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
-      const targetTab = $(e.target).attr('href');
-      if(targetTab === '#business') {
-        $('.business-fields').show(); // Show business fields for the business tab
-      } else {
-        $('.business-fields').hide(); // Hide business fields for the personal tab
-      }
-    });
+    $(document).ready(function() {
+        // Toggle visibility based on the selected tab
+        $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+            const targetTab = $(e.target).attr('href');
+            if(targetTab === '#business') {
+                $('.business-fields').show(); // Show business fields for the business tab
+            } else {
+                $('.business-fields').hide(); // Hide business fields for the personal tab
+            }
+        });
 
-    // Check URL hash on initial load to set the correct tab and fields visibility
-    if(window.location.hash === '#business') {
-      $('.business-fields').show();
-      $('#signupTab a[href="#business"]').tab('show'); // Programmatically selecting the business tab
-    } else {
-      $('.business-fields').hide();
-      $('#signupTab a[href="#personal"]').tab('show'); // Ensuring the personal tab is active
-    }
-
-    // Function to show or hide business-related fields
-    function toggleBusinessFields(show) {
-      const businessFieldWrappers = [
-        '#div_id_business_name',
-        '#div_id_description',
-        '#div_id_address',
-        '#div_id_phone_number',
-        '#div_id_website',
-        '#div_id_logo',
-        '#div_id_category'
-      ];
-
-      businessFieldWrappers.forEach(function(selector) {
-        if (show) {
-          $(selector).closest('.form-group').show();
+        // Check URL hash on initial load to set the correct tab and fields visibility
+        if(window.location.hash === '#business') {
+            $('.business-fields').show();
+            $('#signupTab a[href="#business"]').tab('show'); // Programmatically selecting the business tab
         } else {
-          $(selector).closest('.form-group').hide();
+            $('.business-fields').hide();
+            $('#signupTab a[href="#personal"]').tab('show'); // Ensuring the personal tab is active
         }
-      });
-    }
 
-    // Adjusted to listen for click event on tab links
-    $('#signupTab a').click(function(e) {
-      e.preventDefault();
-      $(this).tab('show');
-      const targetTab = $(this).attr('href');
-      toggleBusinessFields(targetTab === '#business');
+        // Function to show or hide business-related fields
+        function toggleBusinessFields(show) {
+            const businessFieldWrappers = [
+                '#div_id_business_name',
+                '#div_id_description',
+                '#div_id_address',
+                '#div_id_phone_number',
+                '#div_id_website',
+                '#div_id_logo',
+                '#div_id_category'
+            ];
+
+            businessFieldWrappers.forEach(function(selector) {
+                if (show) {
+                    $(selector).closest('.form-group').show();
+                } else {
+                    $(selector).closest('.form-group').hide();
+                }
+            });
+        }
+
+        // Adjusted to listen for click event on tab links
+        $('#signupTab a').click(function(e) {
+            e.preventDefault();
+            $(this).tab('show');
+            const targetTab = $(this).attr('href');
+            toggleBusinessFields(targetTab === '#business');
+        });
+
+        // Check on page load or refresh
+        if(window.location.hash === '#business') {
+            toggleBusinessFields(true);
+            $('#signupTab a[href="#business"]').tab('show');
+        } else {
+            toggleBusinessFields(false);
+            $('#signupTab a[href="#personal"]').tab('show');
+        }
     });
-
-    // Check on page load or refresh
-    if(window.location.hash === '#business') {
-      toggleBusinessFields(true);
-      $('#signupTab a[href="#business"]').tab('show');
-    } else {
-      toggleBusinessFields(false);
-      $('#signupTab a[href="#personal"]').tab('show');
-    }
-  });
 </script>
 {% endblock %}
 

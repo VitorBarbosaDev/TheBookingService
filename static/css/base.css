@@ -250,6 +250,28 @@ body {
     margin: 10px auto;
 }
 
+/* Custom Styles for the Login Form */
+.login-form {
+    background-color: #f8f9fa; /* Light grey background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow */
+}
+
+.login-form h1 {
+    color: #333; /* Dark grey text */
+}
+
+.login-form .btn-primary {
+    background-color: #0056b3; /* Darker blue */
+    border: none;
+}
+
+.login-form a {
+    color: #0056b3; /* Matching the button color for links */
+}
+
+
 @media (max-width: 768px) {
     .custom-spacing {
         padding-top: 100px;

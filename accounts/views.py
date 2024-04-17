@@ -10,37 +10,39 @@ from django.core.paginator import Paginator
 
 def custom_signup_view(request):
     account_type = request.GET.get('type', 'personal')
-
     if request.method == 'POST':
-        form = CustomSignupForm(request.POST, request.FILES)
+        if account_type == 'business':
+            form = BusinessSignupForm(request.POST, request.FILES)
+        else:
+            form = CustomSignupForm(request.POST, request.FILES)
+
         if form.is_valid():
-            try:
-                user = form.save(request)
-                login(request, user)
-
-                if account_type == 'business':
-                    Business.objects.create(
-                        owner=user,
-                        name=form.cleaned_data.get('business_name'),
-                        description=form.cleaned_data.get('description', ''),
-                        address=form.cleaned_data.get('address', ''),
-                        phone_number=form.cleaned_data.get('phone_number', ''),
-                        email=form.cleaned_data.get('email', ''),
-                        website=form.cleaned_data.get('website', ''),
-                        logo=form.cleaned_data.get('logo', None),
-                    )
-                    messages.success(request, "Your business account has been successfully created!")
-                    return redirect('profile')
-                else:
-                    UserProfile.objects.create(user=user)
-                    messages.success(request, "Your personal account has been successfully created!")
-                    return redirect('profile')
-            except Exception as e:
-                messages.error(request, "An error occurred during account creation. Please try again.")
+            user = form.save()
+            login(request, user)
+            if account_type == 'business':
+                Business.objects.create(
+                    owner=user,
+                    name=form.cleaned_data.get('business_name'),
+                    description=form.cleaned_data.get('description', ''),
+                    address=form.cleaned_data.get('address', ''),
+                    phone_number=form.cleaned_data.get('phone_number', ''),
+                    email=form.cleaned_data.get('email', ''),
+                    website=form.cleaned_data.get('website', ''),
+                    logo=form.cleaned_data.get('logo', None),
+                    category=form.cleaned_data.get('category', None)
+                )
+                messages.success(request, "Your business account has been successfully created!")
+            else:
+                UserProfile.objects.create(user=user)
+                messages.success(request, "Your personal account has been successfully created!")
+            return redirect('profile')
     else:
-        form = CustomSignupForm(account_type=account_type)
+        form = BusinessSignupForm() if account_type == 'business' else CustomSignupForm()
 
-    context = {'form': form, 'account_type': account_type}
+    context = {
+        'form': form,
+        'account_type': account_type
+    }
     return render(request, 'accounts/signup.html', context)
 
 
