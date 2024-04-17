@@ -1,8 +1,19 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block content %}
 <div class="container mt-5 page-content">
     <h2 class="text-center">Services in Category: {{ category.name|default:"All Categories" }}</h2>
+    <form method="get" class="mb-4">
+        <div class="input-group mb-3">
+            <input type="text" name="q" value="{{ request.GET.q }}" placeholder="{% trans 'Search services or businesses...' %}" class="form-control">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">{% trans 'Search' %}</button>
+            </div>
+        </div>
+    </form>
+
     <div class="row">
         {% for service in services %}
         <div class="col-md-4 mb-4">
@@ -15,17 +26,38 @@
                     <p class="card-text">{{ service.description|truncatewords:20 }}</p>
                 </div>
                 <div class="card-footer">
-                    <small class="text-muted"> {% if service.service_type == 'fixed' %}
+                    <small class="text-muted">
+                        {% if service.service_type == 'fixed' %}
                         Price: ${{ service.price }}
                         {% elif service.service_type == 'hourly' %}
                         Price per hour: ${{ service.price_per_hour }}
-                        {% endif %}</small>
+                        {% endif %}
+                    </small>
                     <a href="{% url 'services:service_detail' service.id %}" class="btn btn-primary float-right">View Details</a>
                 </div>
             </div>
         </div>
         {% empty %}
-        <p class="text-center">No services found in this category.</p>
+        <p class="text-center">{% trans 'No services found.' %}</p>
+        {% endfor %}
+
+        {% for business in businesses %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if business.logo %}
+                <img src="{{ business.logo.url }}" class="card-img-top" alt="{{ business.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ business.name }}</h5>
+                    <p class="card-text">{{ business.description|truncatewords:20 }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'business:business_detail' business.id %}" class="btn btn-primary float-right">Visit Business</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">{% trans 'No businesses found.' %}</p>
         {% endfor %}
     </div>
 </div>

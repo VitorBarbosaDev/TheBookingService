@@ -272,6 +272,28 @@ body {
 }
 
 
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+    border-top-left-radius: calc(.25rem - 1px);
+    border-top-right-radius: calc(.25rem - 1px);
+}
+
+/* Styles for the service and business cards */
+.card {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.card-footer {
+    background-color: #f8f9fa; /* Light grey background */
+    border-top: 1px solid #eee; /* Slight separation from body to footer */
+}
+
+
 @media (max-width: 768px) {
     .custom-spacing {
         padding-top: 100px;

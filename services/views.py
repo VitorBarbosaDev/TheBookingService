@@ -8,6 +8,8 @@ from django.views.generic.detail import DetailView
 from accounts.models import Category
 from business.models import BusinessHours , Business
 import logging
+from django.db.models import Q
+
 
 class ServiceListView(ListView):
     model = Service
@@ -47,15 +49,26 @@ def get_services_by_category(category):
 
 def service_list_by_category(request, category_slug):
     category = None
+    services = Service.objects.filter(is_active=True)
+    businesses = Business.objects.none()  # Start with no businesses
+
     if category_slug != 'all':
         category = get_object_or_404(Category, slug=category_slug)
         services = get_services_by_category(category)
-    else:
-        services = Service.objects.filter(is_active=True)
+
+    query = request.GET.get('q')
+    if query:
+        services = services.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+        businesses = Business.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
 
     return render(request, 'services/service_list_by_category.html', {
         'category': category,
-        'services': services
+        'services': services,
+        'businesses': businesses
     })
 
 
@@ -113,3 +126,24 @@ def service_list(request):
     context['businesses'] = businesses_list
 
     return render(request, 'services/service_list.html', context)
+
+def global_search(request):
+    query = request.GET.get('q', '')
+    context = {}
+
+    if query:
+        services = Service.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query),
+            is_active=True
+        )
+        businesses = Business.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+    else:
+        services = Service.objects.filter(is_active=True)
+        businesses = Business.objects.none()  # Start with no businesses if no query
+
+    context['services'] = services
+    context['businesses'] = businesses
+
+    return render(request, 'services/global_search_results.html', context)
