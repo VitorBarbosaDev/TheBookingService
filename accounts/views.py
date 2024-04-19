@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
-from .forms import CustomSignupForm, UserProfileForm
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import CustomSignupForm, UserProfileForm,ReviewForm
 from django.contrib.auth import login
-from .models import  UserProfile
+from .models import  UserProfile,Booking, Review
 from business.models import Business
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -85,16 +85,15 @@ def delete_profile_view(request):
 def bookings_view(request):
     user = request.user
     context = {'user_type': 'business' if hasattr(user, 'business') else 'personal'}
+    is_business_owner = hasattr(user, 'business')
 
-
-    if hasattr(user, 'business'):
+    if is_business_owner:
         received_query = Booking.objects.filter(service__business=user.business)
         status_received = request.GET.get('status_received')
         if status_received:
             received_query = received_query.filter(status=status_received)
         received_paginator = Paginator(received_query, 6)
         context['page_obj_received'] = received_paginator.get_page(request.GET.get('page_received', 1))
-
 
     made_query = Booking.objects.filter(customer=user)
     status_made = request.GET.get('status_made')
@@ -103,4 +102,63 @@ def bookings_view(request):
     made_paginator = Paginator(made_query, 6)
     context['page_obj_made'] = made_paginator.get_page(request.GET.get('page_made', 1))
 
+    # Adding safe review check
+    reviews_dict = {}
+    for booking in made_query:
+        try:
+            review_exists = booking.review is not None
+        except Booking.review.RelatedObjectDoesNotExist:
+            review_exists = False
+        reviews_dict[booking.id] = review_exists
+
+    context.update({
+        'is_business_owner': is_business_owner,
+        'reviews': reviews_dict,
+    })
+
     return render(request, 'accounts/bookings.html', context)
+
+
+def submit_review(request, booking_id):
+    try:
+        booking = Booking.objects.get(pk=booking_id)
+        if request.user != booking.customer:
+            messages.error(request, "You are not authorized to review this booking.")
+            return redirect('bookings')
+    except Booking.DoesNotExist:
+        messages.error(request, "Booking not found.")
+        return redirect('bookings')
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            Review.objects.create(
+                booking=booking,
+                rating=form.cleaned_data['rating'],
+                comment=form.cleaned_data['comment']
+            )
+            messages.success(request, "Thank you for your review.")
+            return redirect('review_thank_you')
+        else:
+            messages.error(request, "There was an error with your form. Please check your inputs.")
+    else:
+        form = ReviewForm()
+
+    return render(request, 'accounts/submit_review.html', {'form': form, 'booking': booking})
+
+
+@login_required
+def mark_as_completed(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+    if request.method == 'POST':
+        booking.status = 'completed'
+        booking.save()
+
+        return redirect('bookings')
+
+@login_required
+def review_thank_you(request):
+    """
+    Render a thank you page after a user submits a review.
+    """
+    return render(request, 'accounts/review_thank_you.html')

@@ -1,6 +1,6 @@
 from allauth.account.forms import SignupForm
 from django import forms
-from .models import UserProfile, Category
+from .models import UserProfile, Category,Review
 from business.models import Business
 from cloudinary.uploader import upload
 from django_countries.fields import CountryField
@@ -96,3 +96,9 @@ class UserProfileForm(forms.ModelForm):
         widgets = {
                    'profile_picture': forms.FileInput(attrs={'class': 'file-wrap'})
                 }
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['rating', 'comment']

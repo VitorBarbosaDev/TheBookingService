@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4 page-content">
+    <div class="alert alert-success" role="alert">
+        Thank you for submitting your review! We appreciate your feedback.
+    </div>
+    <div>
+        <a href="{% url 'bookings' %}" class="btn btn-primary">Return to your bookings</a>
+    </div>
+</div>
+{% endblock %}

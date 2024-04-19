@@ -6,6 +6,8 @@ from cloudinary.models import CloudinaryField
 from django_countries.fields import CountryField
 from services.models import Service
 from django.utils.text import slugify
+from checkout.models import Booking
+
 
 class CustomUser(AbstractUser):
     is_business_owner = models.BooleanField(default=False)
@@ -50,9 +52,13 @@ class UserProfile(models.Model):
 
 
 class Review(models.Model):
-    booking = models.OneToOneField('checkout.Booking', on_delete=models.CASCADE, related_name='review')
-    rating = models.IntegerField(default=5, choices=[(i, i) for i in range(1, 6)])
+    booking = models.OneToOneField(Booking, on_delete=models.CASCADE, related_name='review')
+    rating = models.IntegerField(choices=[(i, f"{i} Stars") for i in range(1, 6)])
     comment = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Review for {self.booking.service.name} by {self.booking.customer.username}"
+
 
 
 class UserProfileImage(models.Model):

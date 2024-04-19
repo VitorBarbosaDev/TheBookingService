@@ -270,7 +270,15 @@ body {
 .login-form a {
     color: #0056b3; /* Matching the button color for links */
 }
+.star {
+    cursor: pointer;
+    font-size: 25px;
+    color: grey;
+}
+.star.rated {
+    color: gold;
 
+}
 
 .card-img-top {
     height: 200px;
@@ -280,7 +288,7 @@ body {
     border-top-right-radius: calc(.25rem - 1px);
 }
 
-/* Styles for the service and business cards */
+
 .card {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     margin-bottom: 20px;
@@ -289,8 +297,8 @@ body {
 }
 
 .card-footer {
-    background-color: #f8f9fa; /* Light grey background */
-    border-top: 1px solid #eee; /* Slight separation from body to footer */
+    background-color: #f8f9fa;
+    border-top: 1px solid #eee;
 }
 
 .country-select {

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4 page-content">
+    <h1>Submit Review for {{ booking.service.name }}</h1>
+    <div class="card">
+        <div class="card-body">
+            <form method="post" action="{% url 'submit_review' booking_id=booking.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="rating">Rating:</label>
+                    <div class="rating">
+                        {% for star in "12345" %}
+                        <span class="star" data-value="{{ star }}">☆</span>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="rating" id="rating" value="">
+                </div>
+                <div class="form-group">
+                    <label for="comment">Comment:</label>
+                    <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let stars = document.querySelectorAll('.star');
+        stars.forEach(function(star) {
+            star.addEventListener('click', setRating);
+        });
+
+        function setRating(ev) {
+            let span = ev.currentTarget;
+            let stars = document.querySelectorAll('.star');
+            let match = false;
+            let num = 0;
+            stars.forEach(function(star, index) {
+                if(match) {
+                    star.classList.remove('rated');
+                } else {
+                    star.classList.add('rated');
+                }
+                if(star === span) {
+                    match = true;
+                    num = index + 1;
+                }
+            });
+            document.getElementById('rating').value = num;
+        }
+    });
+</script>
+{% endblock %}
