@@ -2,14 +2,16 @@ from django import forms
 from .models import Booking, Transaction
 from django_countries.fields import CountryField
 from django_countries.widgets import CountrySelectWidget
-
+from django.forms import DateField, DateInput
+from datetime import datetime
 
 class BookingForm(forms.ModelForm):
     start_time = forms.ChoiceField(choices=[])
     email = forms.EmailField(required=True)
+    date = forms.DateField(widget=DateInput(attrs={'type': 'date', 'min': datetime.now().date().isoformat()}))
     class Meta:
         model = Booking
-        fields = ['start_time', 'duration_hours', 'notes', 'email', 'first_name', 'last_name', 'phone_number', 'default_country', 'default_county', 'default_postcode', 'default_town_or_city', 'default_street_address1', 'default_street_address2']
+        fields = ['date','start_time', 'duration_hours', 'notes', 'email', 'first_name', 'last_name', 'phone_number', 'default_country', 'default_county', 'default_postcode', 'default_town_or_city', 'default_street_address1', 'default_street_address2']
 
 
     def __init__(self, *args, **kwargs):
@@ -42,8 +44,11 @@ class BookingForm(forms.ModelForm):
     default_town_or_city = forms.CharField(max_length=40, required=False)
     default_county = forms.CharField(max_length=80, required=False)
     default_postcode = forms.CharField(max_length=20, required=False)
-    default_country = forms.ChoiceField(choices=CountryField().choices, required=False, widget=CountrySelectWidget())
-
+    default_country = forms.ChoiceField(
+            choices=CountryField().choices,
+            required=False,
+            widget=CountrySelectWidget(attrs={'class': 'country-select'})
+        )
 
 
 class TransactionForm(forms.ModelForm):

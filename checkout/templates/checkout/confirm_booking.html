@@ -5,15 +5,13 @@
 {% block content %}
 <div class="container mt-5 page-content">
     <h2 class="text-center mb-4">Confirm Your Booking</h2>
+
+
     <form method="post" class="needs-validation" novalidate>
         {% csrf_token %}
         <div class="row">
             <div class="col-md-6 mb-4">
                 <h4 class="mb-3">Service Details</h4>
-
-
-
-
                 <ul class="list-group mb-3">
                     <li class="list-group-item d-flex justify-content-between lh-condensed">
                         <div>
@@ -30,14 +28,12 @@
                         </div>
                     </li>
                 </ul>
-
                 {% if booking_form_errors %}
                 <div class="alert alert-danger">
                     <strong>Form Errors:</strong>
                     {{ booking_form_errors }}
                 </div>
                 {% endif %}
-
                 {% if transaction_form_errors %}
                 <div class="alert alert-danger">
                     <strong>Transaction Errors:</strong>
@@ -47,10 +43,12 @@
             </div>
             <div class="col-md-6 mb-4">
                 <h4 class="mb-3">Booking Details</h4>
+                <div id="slot-message" class="alert alert-info" style="display:none;">No available slots on selected date. Please choose another date.</div>
                 {{ booking_form|crispy }}
                 <button class="btn btn-primary btn-lg btn-block" type="submit">Confirm and Pay</button>
             </div>
         </div>
+
     </form>
 </div>
 {% endblock %}
@@ -63,6 +61,9 @@
         const fixedPrice = parseFloat("{{ service.price }}") || 0;
         const durationInput = document.querySelector('#id_duration_hours');
         const totalPriceDisplay = document.getElementById('total-price');
+        const dateInput = document.getElementById('id_date');
+        const startTimeSelect = document.getElementById('id_start_time');
+        const slotMessage = document.getElementById('slot-message');
 
         function updateTotalCost() {
             const duration = parseFloat(durationInput.value) || 0;
@@ -70,8 +71,63 @@
             totalPriceDisplay.textContent = `$${totalPrice.toFixed(2)}`;
         }
 
+        function clearSlotSelection() {
+            startTimeSelect.innerHTML = '';
+            startTimeSelect.style.display = 'none';
+            slotMessage.style.display = 'block';
+            slotMessage.textContent = 'Please select a date to see available slots.';
+        }
+
+        function handleNoSlotsAvailable(message) {
+            startTimeSelect.innerHTML = '';
+            startTimeSelect.style.display = 'none';
+            slotMessage.style.display = 'block';
+            slotMessage.textContent = message;
+        }
+
+        function fetchAndDisplaySlots(date) {
+            if (!date) {
+                clearSlotSelection();
+                return;
+            }
+
+            fetch(`/checkout/fetch_time_slots?date=${date}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        handleNoSlotsAvailable(data.error);
+                    } else if (data.slots) {
+                        startTimeSelect.innerHTML = ''; // Clear previous options
+                        startTimeSelect.style.display = 'block';
+                        slotMessage.style.display = 'none';
+                        data.slots.forEach(slot => {
+                            const option = document.createElement('option');
+                            option.value = `${slot.start} - ${slot.end}`;
+                            option.textContent = `${slot.start} - ${slot.end}`;
+                            startTimeSelect.appendChild(option);
+                        });
+                    } else {
+                        console.error('Error: Unexpected response format:', data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching time slots:', error);
+                    handleNoSlotsAvailable('Error fetching slots. Please try again.');
+                });
+        }
+
         durationInput.addEventListener('change', updateTotalCost);
-        updateTotalCost(); // Initial calculation on page load
+        updateTotalCost();
+
+        if (dateInput.value) {
+            fetchAndDisplaySlots(dateInput.value);
+        } else {
+            clearSlotSelection();
+        }
+
+        dateInput.addEventListener('change', () => {
+            fetchAndDisplaySlots(dateInput.value);
+        });
     });
 </script>
 {% endblock %}

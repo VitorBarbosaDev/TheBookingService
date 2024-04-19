@@ -1,90 +1,64 @@
-{% extends "account/base_manage_email.html" %}
-{% load allauth i18n %}
+{% extends "base.html" %}
+{% load i18n %}
+
 {% block head_title %}
-    {% trans "Email Addresses" %}
+{% trans "Email Addresses" %}
 {% endblock head_title %}
+
 {% block content %}
-    {% element h1 %}
-        {% trans "Email Addresses" %}
-    {% endelement %}
+<div class="container mt-5">
+    <h1>{% trans "Email Addresses" %}</h1>
     {% if emailaddresses %}
-        <p>{% trans 'The following email addresses are associated with your account:' %}</p>
-        {% url 'account_email' as email_url %}
-        {% element form form=form action=email_url method="post" %}
-            {% slot body %}
-                {% csrf_token %}
-                {% for radio in emailaddress_radios %}
-                    {% with emailaddress=radio.emailaddress %}
-                        {% element field type="radio" checked=radio.checked name="email" value=emailaddress.email id=radio.id %}
-                            {% slot label %}
-                                {{ emailaddress.email }}
-                                {% if emailaddress.verified %}
-                                    {% element badge tags="success,email,verified" %}
-                                        {% translate "Verified" %}
-                                    {% endelement %}
-                                {% else %}
-                                    {% element badge tags="warning,email,unverified" %}
-                                        {% translate "Unverified" %}
-                                    {% endelement %}
-                                {% endif %}
-                                {% if emailaddress.primary %}
-                                    {% element badge tags="email,primary" %}
-                                        {% translate "Primary" %}
-                                    {% endelement %}
-                                {% endif %}
-                            {% endslot %}
-                        {% endelement %}
-                    {% endwith %}
-                {% endfor %}
-            {% endslot %}
-            {% slot actions %}
-                {% element button type="submit" name="action_primary" %}
-                    {% trans 'Make Primary' %}
-                {% endelement %}
-                {% element button tags="secondary" type="submit" name="action_send" %}
-                    {% trans 'Re-send Verification' %}
-                {% endelement %}
-                {% element button tags="danger,delete" type="submit" name="action_remove" %}
-                    {% trans 'Remove' %}
-                {% endelement %}
-            {% endslot %}
-        {% endelement %}
+    <p>{% trans 'The following email addresses are associated with your account:' %}</p>
+    <form method="post" action="{% url 'account_email' %}">
+        {% csrf_token %}
+        {% for emailaddress in emailaddresses %}
+        <div class="form-check">
+            <input type="radio" class="form-check-input" name="email" id="email_{{ emailaddress.pk }}"
+                   value="{{ emailaddress.email }}" {% if emailaddress.primary %}checked{% endif %}>
+            <label class="form-check-label" for="email_{{ emailaddress.pk }}">
+                {{ emailaddress.email }}
+                {% if emailaddress.verified %}
+                <span class="badge badge-success">{% trans "Verified" %}</span>
+                {% else %}
+                <span class="badge badge-warning">{% trans "Unverified" %}</span>
+                {% endif %}
+                {% if emailaddress.primary %}
+                <span class="badge badge-info">{% trans "Primary" %}</span>
+                {% endif %}
+            </label>
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary mt-3" name="action" value="make_primary">{% trans "Make Primary" %}</button>
+        <button type="submit" class="btn btn-secondary mt-3" name="action" value="resend_verification">{% trans "Re-send Verification" %}</button>
+        <button type="submit" class="btn btn-danger mt-3" name="action" value="remove">{% trans "Remove" %}</button>
+    </form>
     {% else %}
-        {% include "account/snippets/warn_no_email.html" %}
+    <p>{% trans "No email addresses are associated with your account." %}</p>
     {% endif %}
     {% if can_add_email %}
-        {% element h2 %}
-            {% trans "Add Email Address" %}
-        {% endelement %}
-        {% url 'account_email' as action_url %}
-        {% element form form=form method="post" action=action_url %}
-            Hoi bef bod
-            {% slot body %}
-                {% csrf_token %}
-                {% element fields form=form %}
-                {% endelement %}
-            {% endslot %}
-            befac
-            {% slot actions %}
-                {% element button name="action_add" type="submit" %}
-                    {% trans "Add Email" %}
-                {% endelement %}
-            {% endslot %}
-        {% endelement %}
+    <h2>{% trans "Add Email Address" %}</h2>
+    <form method="post" action="{% url 'account_email' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary mt-3" name="action" value="add_email">{% trans "Add Email" %}</button>
+    </form>
     {% endif %}
+</div>
 {% endblock content %}
-{% block extra_body %}
-    <script type="text/javascript">
-(function() {
-  var message = "{% trans 'Do you really want to remove the selected email address?' %}";
-  var actions = document.getElementsByName('action_remove');
-  if (actions.length) {
-    actions[0].addEventListener("click", function(e) {
-      if (! confirm(message)) {
-        e.preventDefault();
-      }
+
+{% block extra_js %}
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.querySelector('form[action="{% url 'account_email' %}"]');
+        form.addEventListener('submit', function(event) {
+            if (event.submitter.name === 'action' && event.submitter.value === 'remove') {
+                var confirmation = confirm("{% trans 'Do you really want to remove the selected email address?' %}");
+                if (!confirmation) {
+                    event.preventDefault();
+                }
+            }
+        });
     });
-  }
-})();
-    </script>
-{% endblock extra_body %}
+</script>
+{% endblock extra_js %}

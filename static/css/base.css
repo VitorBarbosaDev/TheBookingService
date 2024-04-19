@@ -293,6 +293,10 @@ body {
     border-top: 1px solid #eee; /* Slight separation from body to footer */
 }
 
+.country-select {
+    max-width: 300px;
+    width: 100%;
+}
 
 @media (max-width: 768px) {
     .custom-spacing {

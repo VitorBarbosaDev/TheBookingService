@@ -7,7 +7,6 @@
         <div class="col-md-8">
             <div class="service-detail text-center">
                 <img src="{% if service.image %}{{ service.image.url }}{% else %}{% static 'images/nobody.jpg' %}{% endif %}" alt="{{ service.name }}" class="service-img mb-3">
-
                 <h2>{{ service.name }}</h2>
                 <p><strong>Business:</strong> <a href="{% url 'business:business_detail' service.business.pk %}">{{ service.business.name }}</a></p>
                 <p><strong>Category:</strong> {{ service.category }}</p>
@@ -34,11 +33,14 @@
                     {% endfor %}
                 </div>
 
+                {% if business_hours_qs %}
                 {% if request.user != service.business.owner %}
                 <div class="text-center mt-4">
                     <a href="{% url 'checkout:confirm_booking' service.id %}" class="btn btn-primary">Book Now</a>
                 </div>
                 {% endif %}
+                {% endif %}
+
 
                 <div class="mt-4">
                     <a href="{% url 'business:business_detail' service.business.pk %}" class="btn btn-secondary">View Business</a>
@@ -47,62 +49,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
-
-
-
-
-
-{% block extra_js %}
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        const csrftoken = getCookie('csrftoken');
-
-        const checkoutButton = document.getElementById('checkout-button');
-        if (checkoutButton) {
-            checkoutButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                const serviceId = this.getAttribute('data-service-id');
-                const data = { 'service_id': serviceId };
-
-                fetch('{% url "checkout:create_session" %}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrftoken,
-                    },
-                    body: JSON.stringify(data)
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if(data.redirect_url) {
-                            window.location.href = data.redirect_url;
-                        } else {
-                            alert('Error: ' + data.error);
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-            });
-        } else {
-            console.error('Checkout button not found.');
-        }
-    });
-</script>
-{% endblock %}
-

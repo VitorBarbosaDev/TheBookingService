@@ -127,23 +127,3 @@ def service_list(request):
 
     return render(request, 'services/service_list.html', context)
 
-def global_search(request):
-    query = request.GET.get('q', '')
-    context = {}
-
-    if query:
-        services = Service.objects.filter(
-            Q(name__icontains=query) | Q(description__icontains=query),
-            is_active=True
-        )
-        businesses = Business.objects.filter(
-            Q(name__icontains=query) | Q(description__icontains=query)
-        )
-    else:
-        services = Service.objects.filter(is_active=True)
-        businesses = Business.objects.none()  # Start with no businesses if no query
-
-    context['services'] = services
-    context['businesses'] = businesses
-
-    return render(request, 'services/global_search_results.html', context)

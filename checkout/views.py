@@ -9,7 +9,7 @@ from services.models import Service
 import logging
 from .forms import BookingForm, TransactionForm
 from django.urls import reverse
-from business.models import BusinessHours
+from business.models import BusinessHours,Slot
 from collections import defaultdict
 from datetime import datetime, timedelta, date
 from django.urls import reverse
@@ -17,7 +17,8 @@ import stripe
 from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-
+from django.utils.timezone import make_aware
+from django.core.mail import send_mail
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -127,7 +128,6 @@ def checkout_error(request):
 
 
 def checkout_success(request):
-
     if request.session.get('payment_status') == 'Success':
         booking_id = request.session.get('booking_id')
         if not booking_id:
@@ -137,29 +137,49 @@ def checkout_success(request):
 
         try:
             booking = Booking.objects.get(pk=booking_id)
-
             booking.status = 'confirmed'
             booking.save()
+
+            # Fetch the slot that exactly matches the booking time and day
+            day_of_week = booking.date.strftime('%A')
+            start_time = booking.date.time()
+            slot = Slot.objects.filter(
+                business_hours__business=booking.service.business,
+                business_hours__day=day_of_week,
+                start_time=start_time,
+                is_booked=False
+            ).first()
+
+            if slot:
+                slot.is_booked = True
+                slot.save()
+            else:
+                logger.error("No matching slot found to mark as booked.")
+
+            # Send confirmation email
+            subject = 'Booking Confirmation'
+            message = f'Your booking for {booking.service.name} on {booking.date.strftime("%Y-%m-%d at %H:%M")} has been confirmed. Thank you for your payment. Your booking details are as follows:\nService: {booking.service.name}\nDate: {booking.date.strftime("%Y-%m-%d")}\nTime: {booking.date.strftime("%H:%M")}\nPrice: ${booking.price}'
+            from_email = settings.DEFAULT_FROM_EMAIL
+            recipient_list = [booking.customer.email]
+            send_mail(subject, message, from_email, recipient_list)
+
+            messages.success(request, "Booking and payment successful! An email confirmation has been sent.")
+            context = {'booking': booking}
+            return render(request, 'checkout/checkout_success.html', context)
         except Booking.DoesNotExist:
             logger.error(f"Booking with ID {booking_id} not found.")
             messages.error(request, "Error: No booking found with the provided ID.")
             return redirect('checkout:error')
-
-
-        del request.session['payment_status']
-        if 'booking_id' in request.session:
-            del request.session['booking_id']
-        if 'checkout_session_id' in request.session:
-            del request.session['checkout_session_id']
-
-
-        messages.success(request, "Booking and payment successful! Thank you for your purchase.")
-
-        context = {'booking': booking}
-        return render(request, 'checkout/checkout_success.html', context)
+        except Exception as e:
+            logger.error(f"Error marking slot as booked: {str(e)}")
+            messages.error(request, f"Technical error occurred: {str(e)}")
+            return redirect('checkout:error')
     else:
         messages.error(request, "Payment was not successful. Please try again.")
         return redirect('checkout:error')
+
+
+
 
 
 
@@ -268,50 +288,52 @@ def generate_slots_for_business_hours(business_hours_qs, date):
     return slots
 
 
+from django.contrib.auth import get_user_model
+from django.utils.timezone import make_aware
+
 @csrf_exempt
 def confirm_booking(request, service_id):
     service = get_object_or_404(Service, id=service_id)
     business_hours_qs = BusinessHours.objects.filter(business=service.business)
-    booking_date = timezone.now().date()  # Ensure date is timezone-aware right at the start
-    slots = generate_slots_for_business_hours(business_hours_qs, booking_date)
 
+    if not business_hours_qs.exists():
+        messages.error(request, "No business hours set for this business.")
+        return redirect('some_error_handling_view')
+
+    if request.user.is_authenticated:
+        user = request.user
+    else:
+
+        User = get_user_model()
+        user = User.objects.create(username=f"guest_{timezone.now().strftime('%Y%m%d%H%M%S')}", is_guest=True)
+        user.set_unusable_password()
+        user.save()
+
+    slots = generate_slots_for_business_hours(business_hours_qs, timezone.now().date())
     context = {
         'service': service,
         'slots': slots,
     }
 
-    booking_form = BookingForm(request.POST or None, slots=slots, user=request.user if request.user.is_authenticated else None)
+    booking_form = BookingForm(request.POST or None, slots=slots, user=user)
     transaction_form = TransactionForm(request.POST or None)
 
     if request.method == 'POST':
         if booking_form.is_valid() and transaction_form.is_valid():
             booking = booking_form.save(commit=False)
             booking.service = service
-            booking.customer = request.user if request.user.is_authenticated else None
-            booking.price = calculate_price(service, booking_form.cleaned_data['duration_hours'])
+            booking.customer = user
 
+            # Use the date from the form
+            booking_date = booking_form.cleaned_data['date']
             slot_time = booking_form.cleaned_data['start_time']
             start_time = datetime.strptime(slot_time.split(' - ')[0], '%H:%M').time()
-            booking.date = timezone.make_aware(datetime.combine(booking_date, start_time))
-            if request.user.is_authenticated:
-                        booking.customer = request.user
-            else:
+            naive_datetime = datetime.combine(booking_date, start_time)
+            booking.date = make_aware(naive_datetime)  # Make the datetime timezone aware
 
-                guest_user = get_user_model().objects.create_user(
-                    username=f"guest_{timezone.now().strftime('%Y%m%d%H%M%S')}",
-                    email=booking_form.cleaned_data['email'],
-                    first_name=booking_form.cleaned_data['first_name'],
-                    last_name=booking_form.cleaned_data['last_name'],
-                    is_business_owner=False,
-                    password=None,
-                    is_guest=True
-                )
-                guest_user.save()
-                booking.customer = guest_user
-
+            booking.price = calculate_price(service, booking_form.cleaned_data['duration_hours'])
             booking.save()
 
-            # Save the booking_id in the session
             request.session['booking_id'] = booking.pk
             request.session['service_id'] = service.id
 
@@ -320,9 +342,6 @@ def confirm_booking(request, service_id):
             transaction.amount = booking.price
             transaction.transaction_id = f"TXN-{timezone.now().strftime('%Y%m%d%H%M%S')}-{booking.id}"
             transaction.save()
-
-
-            request.session['transaction_id'] = transaction.transaction_id
 
             try:
                 checkout_session = stripe.checkout.Session.create(
@@ -357,6 +376,37 @@ def confirm_booking(request, service_id):
     })
 
     return render(request, 'checkout/confirm_booking.html', context)
+
+
+
+def fetch_time_slots(request):
+    date_str = request.GET.get('date')
+    if not date_str:
+        return JsonResponse({'error': 'No date provided'}, status=400)
+
+    try:
+        selected_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+    except ValueError:
+        return JsonResponse({'error': 'Invalid date format'}, status=400)
+
+    if selected_date < date.today():
+        return JsonResponse({'error': 'Cannot select past dates for booking.'}, status=400)
+
+    business_hours = BusinessHours.objects.filter(day=selected_date.strftime('%A'))
+    if not business_hours.exists():
+        return JsonResponse({'error': 'No business hours on this day'}, status=404)
+
+    slots = Slot.objects.filter(business_hours__in=business_hours, is_booked=False).values('start_time', 'end_time')
+    slot_data = [{'start': slot['start_time'].strftime('%H:%M'), 'end': slot['end_time'].strftime('%H:%M')} for slot in slots]
+
+    if not slot_data:
+        return JsonResponse({'error': 'No available slots on selected date. Please choose another date.'}, status=404)
+
+    return JsonResponse({'slots': slot_data})
+
+
+
+
 
 
 def calculate_price(service, duration_hours):
