@@ -292,6 +292,14 @@ main {
 
 }
 
+.star-rating .fa-star, .star-rating .fa-star-half-alt, .star-rating .fa-star {
+    color: #FFD700; /* Gold color */
+}
+
+.star-rating .far.fa-star {
+    color: #ccc; /* Light gray color for empty stars */
+}
+
 .card-img-top {
     height: 200px;
     object-fit: cover;
@@ -393,16 +401,19 @@ main {
     .navbar {
         padding-bottom: 0; /* Optional: Adjust the navbar padding if needed */
     }
-}
 
-
-/* Responsive adjustments for smaller devices */
-@media (max-width: 768px) {
-    .page-content {
-        padding-top: 150px; /* Increased top padding for smaller devices */
+    .input-group, .input-group-append {
+        width: 100%;
+        flex-direction: column;
     }
 
-    .navbar {
-        padding-bottom: 0px; /* Optional: Adjust the navbar padding if needed */
+    .input-group-append .btn {
+        width: 100%;
+        margin-top: 10px; /* Adds a little space between the input and the button on smaller screens */
+    }
+
+    #mce-EMAIL {
+        max-width: none; /* Removes the max-width on smaller screens to allow full width */
     }
 }
+

@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from checkout.models import Booking
 from django.core.paginator import Paginator
+from services.models import Service
 
 def custom_signup_view(request):
     account_type = request.GET.get('type', 'personal')
@@ -119,6 +120,8 @@ def bookings_view(request):
     return render(request, 'accounts/bookings.html', context)
 
 
+from django.db.models import Avg
+
 def submit_review(request, booking_id):
     try:
         booking = Booking.objects.get(pk=booking_id)
@@ -132,11 +135,13 @@ def submit_review(request, booking_id):
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
-            Review.objects.create(
+            new_review = Review.objects.create(
                 booking=booking,
                 rating=form.cleaned_data['rating'],
                 comment=form.cleaned_data['comment']
             )
+            update_service_rating(new_review.booking.service)
+            update_business_rating(new_review.booking.service.business)
             messages.success(request, "Thank you for your review.")
             return redirect('review_thank_you')
         else:
@@ -145,6 +150,17 @@ def submit_review(request, booking_id):
         form = ReviewForm()
 
     return render(request, 'accounts/submit_review.html', {'form': form, 'booking': booking})
+
+
+def update_service_rating(service):
+    new_rating = service.reviews.aggregate(average_rating=Avg('rating'))['average_rating']
+    service.rating = round(new_rating, 1) if new_rating else 0.0
+    service.save()
+
+def update_business_rating(business):
+    new_rating = Service.objects.filter(business=business).aggregate(average_rating=Avg('rating'))['average_rating']
+    business.rating = round(new_rating, 1) if new_rating else 0.0
+    business.save()
 
 
 @login_required

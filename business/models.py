@@ -1,6 +1,12 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from cloudinary.models import CloudinaryField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.db.models import Avg
+
+from services.models import Service
+from accounts.models import Review
 
 User = get_user_model()
 
@@ -14,10 +20,10 @@ class Business(models.Model):
     website = models.URLField(blank=True, null=True)
     logo = CloudinaryField('business_logos', blank=True, null=True)
     category = models.ForeignKey('accounts.Category', on_delete=models.SET_NULL, null=True, related_name='businesses')
+    rating = models.DecimalField(max_digits=3, decimal_places=1, default=0.0, blank=True, null=True)
 
     def __str__(self):
         return self.name
-
 
 
 class BusinessHours(models.Model):
