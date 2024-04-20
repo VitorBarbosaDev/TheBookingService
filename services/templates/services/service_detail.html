@@ -21,6 +21,19 @@
                     Price per hour: ${{ service.price_per_hour }}
                     {% endif %}
                 </p>
+                <div class="star-rating">
+                    {% if service.rating %}
+                    {% for _ in "12345" %}
+                    {% if forloop.counter <= service.rating %}
+                    <i class="fas fa-star"></i> <!-- full star -->
+                    {% else %}
+                    <i class="far fa-star"></i> <!-- empty star -->
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <span>No Ratings Yet</span>
+                    {% endif %}
+                </div>
 
                 <div class="business-hours">
                     <h3>Business Hours</h3>

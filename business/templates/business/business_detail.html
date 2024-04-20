@@ -18,6 +18,20 @@
         <div><strong>Email:</strong> {{ business.email|default:"No email provided." }}</div>
         <div><strong>Website:</strong> {% if business.website %}<a href="{{ business.website }}" target="_blank">{{ business.website }}</a>{% else %}No website provided.{% endif %}</div>
         <div><strong>Category:</strong> {{ business.category }}</div>
+        <div class="star-rating"><strong>Rating:</strong>
+            {% if business.rating %}
+            {% for _ in "12345" %}
+            {% if forloop.counter <= business.rating %}
+            <i class="fas fa-star"></i> <!-- full star -->
+            {% else %}
+            <i class="far fa-star"></i> <!-- empty star -->
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            <span>No Ratings Yet</span>
+            {% endif %}
+
+        </div>
         <h3 class="mt-4">Business Hours:</h3>
         <ul>
             {% for hours in business.business_hours.all %}

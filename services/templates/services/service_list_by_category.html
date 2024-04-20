@@ -22,8 +22,22 @@
                 <img src="{{ service.image.url }}" class="card-img-top" alt="{{ service.name }}">
                 {% endif %}
                 <div class="card-body">
-                    <h5 class="card-title">{{ service.name }}</h5>
+                    <h5 class="card-title"><strong>{{ service.name }} </strong></h5>
                     <p class="card-text">{{ service.description|truncatewords:20 }}</p>
+                    <p class="card-text"><strong>Business:</strong> <a href="{% url 'business:business_detail' pk=service.business.pk %}">{{ service.business.name }}</a></p>
+                    <div class="star-rating">
+                        {% if service.rating %}
+                        {% for _ in "12345" %}
+                        {% if forloop.counter <= service.rating %}
+                        <i class="fas fa-star"></i> <!-- full star -->
+                        {% else %}
+                        <i class="far fa-star"></i> <!-- empty star -->
+                        {% endif %}
+                        {% endfor %}
+                        {% else %}
+                        <span>No Ratings Yet</span>
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="card-footer">
                     <small class="text-muted">
@@ -48,8 +62,21 @@
                 <img src="{{ business.logo.url }}" class="card-img-top" alt="{{ business.name }}">
                 {% endif %}
                 <div class="card-body">
-                    <h5 class="card-title">{{ business.name }}</h5>
+                    <h5 class="card-title"><strong>{{ business.name }} </strong></h5>
                     <p class="card-text">{{ business.description|truncatewords:20 }}</p>
+                    <div class="star-rating">
+                        {% if business.rating %}
+                        {% for _ in "12345" %}
+                        {% if forloop.counter <= business.rating %}
+                        <i class="fas fa-star"></i> <!-- full star -->
+                        {% else %}
+                        <i class="far fa-star"></i> <!-- empty star -->
+                        {% endif %}
+                        {% endfor %}
+                        {% else %}
+                        <span>No Ratings Yet</span>
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="card-footer">
                     <a href="{% url 'business:business_detail' business.id %}" class="btn btn-primary float-right">Visit Business</a>
