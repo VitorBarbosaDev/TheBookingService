@@ -8,7 +8,7 @@
             <div class="service-detail text-center">
                 <img src="{% if service.image %}{{ service.image.url }}{% else %}{% static 'images/nobody.jpg' %}{% endif %}" alt="{{ service.name }}" class="service-img mb-3">
                 <h2>{{ service.name }}</h2>
-                <p><strong>Business:</strong> <a href="{% url 'business:business_detail' service.business.pk %}">{{ service.business.name }}</a></p>
+                <p><strong>Business:</strong> <a href="{% url 'business:business_detail' pk=service.business.pk %}">{{ service.business.name }}</a></p>
                 <p><strong>Category:</strong> {{ service.category }}</p>
                 <p>{{ service.description }}</p>
                 <p>

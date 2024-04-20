@@ -298,7 +298,7 @@ def confirm_booking(request, service_id):
 
     if not business_hours_qs.exists():
         messages.error(request, "No business hours set for this business.")
-        return redirect('some_error_handling_view')
+        return redirect('home')
 
     if request.user.is_authenticated:
         user = request.user
@@ -381,28 +381,40 @@ def confirm_booking(request, service_id):
 
 def fetch_time_slots(request):
     date_str = request.GET.get('date')
-    if not date_str:
-        return JsonResponse({'error': 'No date provided'}, status=400)
+    service_id = request.GET.get('service_id')
+
+
+    if not date_str or not service_id:
+        return JsonResponse({'error': 'Missing date or service ID'}, status=400)
 
     try:
+        service = Service.objects.get(id=service_id)
         selected_date = datetime.strptime(date_str, '%Y-%m-%d').date()
-    except ValueError:
-        return JsonResponse({'error': 'Invalid date format'}, status=400)
+    except (Service.DoesNotExist, ValueError):
+        return JsonResponse({'error': 'Invalid service ID or date format'}, status=400)
 
-    if selected_date < date.today():
+    if selected_date < datetime.now().date():
         return JsonResponse({'error': 'Cannot select past dates for booking.'}, status=400)
 
-    business_hours = BusinessHours.objects.filter(day=selected_date.strftime('%A'))
-    if not business_hours.exists():
-        return JsonResponse({'error': 'No business hours on this day'}, status=404)
 
-    slots = Slot.objects.filter(business_hours__in=business_hours, is_booked=False).values('start_time', 'end_time')
-    slot_data = [{'start': slot['start_time'].strftime('%H:%M'), 'end': slot['end_time'].strftime('%H:%M')} for slot in slots]
 
-    if not slot_data:
+    # Fetch slots that match the specific date and are not booked
+    slots = Slot.objects.filter(
+        business_hours__business=service.business,
+        date=selected_date,
+        is_booked=False
+    ).order_by('start_time')
+
+
+
+
+    if not slots:
         return JsonResponse({'error': 'No available slots on selected date. Please choose another date.'}, status=404)
 
+    slot_data = [{'start': slot.start_time.strftime('%H:%M'), 'end': slot.end_time.strftime('%H:%M')} for slot in slots]
     return JsonResponse({'slots': slot_data})
+
+
 
 
 

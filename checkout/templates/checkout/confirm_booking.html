@@ -90,14 +90,14 @@
                 clearSlotSelection();
                 return;
             }
-
-            fetch(`/checkout/fetch_time_slots?date=${date}`)
+            const serviceId = '{{ service.id }}';
+            fetch(`/checkout/fetch_time_slots?date=${date}&service_id=${serviceId}`)
                 .then(response => response.json())
                 .then(data => {
+                    startTimeSelect.innerHTML = '';  // Clear previous options before adding new ones
                     if (data.error) {
                         handleNoSlotsAvailable(data.error);
-                    } else if (data.slots) {
-                        startTimeSelect.innerHTML = ''; // Clear previous options
+                    } else if (data.slots && data.slots.length > 0) {
                         startTimeSelect.style.display = 'block';
                         slotMessage.style.display = 'none';
                         data.slots.forEach(slot => {
@@ -107,7 +107,7 @@
                             startTimeSelect.appendChild(option);
                         });
                     } else {
-                        console.error('Error: Unexpected response format:', data);
+                        handleNoSlotsAvailable('No available slots on selected date. Please choose another date.');
                     }
                 })
                 .catch(error => {
@@ -115,6 +115,8 @@
                     handleNoSlotsAvailable('Error fetching slots. Please try again.');
                 });
         }
+
+
 
         durationInput.addEventListener('change', updateTotalCost);
         updateTotalCost();
@@ -129,5 +131,6 @@
             fetchAndDisplaySlots(dateInput.value);
         });
     });
+
 </script>
 {% endblock %}

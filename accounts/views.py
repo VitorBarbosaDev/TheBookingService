@@ -135,8 +135,13 @@ def submit_review(request, booking_id):
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
+            if booking.service is None:
+                messages.error(request, "Error: Booking does not have a valid service associated.")
+                return render(request, 'accounts/submit_review.html', {'form': form, 'booking': booking})
+
             new_review = Review.objects.create(
                 booking=booking,
+                service=booking.service,  # Explicitly setting the service here
                 rating=form.cleaned_data['rating'],
                 comment=form.cleaned_data['comment']
             )
@@ -152,10 +157,12 @@ def submit_review(request, booking_id):
     return render(request, 'accounts/submit_review.html', {'form': form, 'booking': booking})
 
 
+
 def update_service_rating(service):
     new_rating = service.reviews.aggregate(average_rating=Avg('rating'))['average_rating']
     service.rating = round(new_rating, 1) if new_rating else 0.0
     service.save()
+
 
 def update_business_rating(business):
     new_rating = Service.objects.filter(business=business).aggregate(average_rating=Avg('rating'))['average_rating']
@@ -178,3 +185,5 @@ def review_thank_you(request):
     Render a thank you page after a user submits a review.
     """
     return render(request, 'accounts/review_thank_you.html')
+
+

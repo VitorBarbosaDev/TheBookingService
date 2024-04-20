@@ -1,5 +1,8 @@
 from django.urls import path
-from .views import business_detail, edit_business, delete_business, business_hours_list_add, edit_business_hours, delete_business_hours
+from .views import (
+    business_detail, edit_business, delete_business,
+    business_hours_list_add, edit_business_hours, delete_business_hours
+)
 
 app_name = 'business'
 

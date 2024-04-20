@@ -26,18 +26,30 @@ class Business(models.Model):
         return self.name
 
 
+def day_to_weekday(day_name):
+    week_days = {
+        'Monday': 2, 'Tuesday': 3, 'Wednesday': 4,
+        'Thursday': 5, 'Friday': 6, 'Saturday': 7, 'Sunday': 1
+    }
+    return week_days.get(day_name, 0)
+
 class BusinessHours(models.Model):
     business = models.ForeignKey(Business, on_delete=models.CASCADE, related_name='business_hours')
     day = models.CharField(max_length=9, choices=[('Monday', 'Monday'), ('Tuesday', 'Tuesday'), ('Wednesday', 'Wednesday'), ('Thursday', 'Thursday'), ('Friday', 'Friday'), ('Saturday', 'Saturday'), ('Sunday', 'Sunday')])
     open_time = models.TimeField()
     close_time = models.TimeField()
 
+    def day_to_weekday(self):
+        return day_to_weekday(self.day)
+
 
 class Slot(models.Model):
     business_hours = models.ForeignKey(BusinessHours, on_delete=models.CASCADE, related_name='slots')
+    date = models.DateField(db_index=True)
     start_time = models.TimeField()
     end_time = models.TimeField()
     is_booked = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.start_time} - {self.end_time}"
+        return f"{self.date} {self.start_time} - {self.end_time}"
+

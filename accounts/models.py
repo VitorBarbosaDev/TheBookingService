@@ -52,12 +52,14 @@ class UserProfile(models.Model):
 
 
 class Review(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='reviews', null=False)
     booking = models.OneToOneField(Booking, on_delete=models.CASCADE, related_name='review')
     rating = models.IntegerField(choices=[(i, f"{i} Stars") for i in range(1, 6)])
     comment = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"Review for {self.booking.service.name} by {self.booking.customer.username}"
+
 
 
 
