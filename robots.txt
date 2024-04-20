@@ -1,0 +1,5 @@
+user-agent: *
+Disallow: /accounts/
+Disallow: /checkout/
+Disallow: /admin/
+sitemap: https://thebookingservice-3eba3aca87b4.herokuapp.com/sitemap.xml

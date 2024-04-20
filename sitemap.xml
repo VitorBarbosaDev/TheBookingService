@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/accounts/signup/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/accounts/login/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/accounts/login/?next=/accounts/profile/bookings/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/services/services/category/all/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/services/services/category/wellness/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/services/services/category/beauty/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/services/services/category/home-improvement/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/info/about/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/info/contact/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/services/services/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/info/privacy-policy/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/accounts/password/reset/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/business/detail/4/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/services/services/8/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/business/detail/8/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/services/services/9/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/business/detail/9/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/services/services/11/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/business/detail/3/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/services/services/6/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/business/detail/10/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/services/services/12/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/services/services/7/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/business/detail/11/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/services/services/13/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/services/services/?page=2</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/checkout/confirm_booking/6/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/checkout/confirm_booking/13/</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://thebookingservice-3eba3aca87b4.herokuapp.com/services/services/?page=1</loc>
+  <lastmod>2024-04-20T23:46:20+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+
+
+</urlset>
