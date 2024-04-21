@@ -196,7 +196,7 @@ This Django application is configured to be hosted on Heroku, using PostgreSQL f
 7. **Start the Development Server:** Run `python manage.py runserver` to start the Django development server.
 8. **Open the Application:** Open `localhost:8000` in your web browser to view the application.
 
-This deployment and local development guide ensures that TheBookingService is set up with a solid foundation for both production and development environments, incorporating robust services like Heroku for hosting, PostgreSQL for database management, and Cloudinary for image storage, thus ensuring scalability and efficiency.
+This comprehensive guide ensures that TheBookingService is set up with a solid foundation for both production and development environments, incorporating robust services like Heroku for hosting, ElephantSQL for database management, Cloudinary for image storage, and Stripe for secure payment processing, thus ensuring scalability and operational efficiency.
 
 ---
 
