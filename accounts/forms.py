@@ -41,11 +41,11 @@ class CustomSignupForm(SignupForm):
         profile_pic_url = None
         if profile_pic:
             upload_result = upload(profile_pic)
-            profile_pic_url = upload_result.get('url')  # Properly define profile_pic_url here
+            profile_pic_url = upload_result.get('url')
             user.userprofile.profile_picture = profile_pic_url
             user.userprofile.save()
 
-        # This ensures that the UserProfile is updated rather than creating a new one
+
         UserProfile.objects.update_or_create(
             user=user,
             defaults={
