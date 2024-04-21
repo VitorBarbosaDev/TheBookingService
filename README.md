@@ -94,6 +94,14 @@ The design of TheBookingService prioritizes clarity, ease of use, and responsive
 - **A11y Practices**: Adheres to accessibility best practices, ensuring that the website is usable by people with disabilities. This includes sufficient contrast ratios for text and background colors.
 - **ARIA Labels**: Where necessary, ARIA labels are applied to icons and non-text elements to enhance screen reader support.
 
+### Wireframes
+
+![image](https://github.com/VitorBarbosaDev/TheBookingService/assets/46977318/bff095c4-1c92-40f9-bdb8-77f3f8d11f0f)
+![image](https://github.com/VitorBarbosaDev/TheBookingService/assets/46977318/b6f9035c-97e4-4d6e-8fff-b920c5d74940)
+![image](https://github.com/VitorBarbosaDev/TheBookingService/assets/46977318/e6aea0cb-e276-49fd-ac96-085a60966fc8)
+![image](https://github.com/VitorBarbosaDev/TheBookingService/assets/46977318/6c75be85-5cb6-4b47-bd54-8920132beddd)
+
+
 
 ---
 
@@ -149,6 +157,13 @@ The design of TheBookingService prioritizes clarity, ease of use, and responsive
 
 
 ---
+
+## Marketing 
+
+### Facebook page
+
+![Uploading image.png…]()
+
 
 ## Deployment & Local Development
 
