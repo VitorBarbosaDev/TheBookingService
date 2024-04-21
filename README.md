@@ -1,7 +1,6 @@
 # The Booking Service
 
-![Mockup Images](![image](https://github.com/VitorBarbosaDev/TheBookingService/assets/46977318/9ac3f0b8-d643-4f19-b1dd-650ffde0e9c5)
-)
+![image](https://github.com/VitorBarbosaDev/TheBookingService/assets/46977318/9ac3f0b8-d643-4f19-b1dd-650ffde0e9c5)
 
 TheBookingService** is a cutting-edge, web-based platform designed to transform the way clients and service providers connect and manage appointments. This platform stands out by providing a user-friendly interface, comprehensive management tools, and a seamless booking process, making it easier than ever to book a wide range of services online.
 
