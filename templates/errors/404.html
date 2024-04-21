@@ -1,9 +1,25 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+<div class="container header-container page-content">
+    <div class="row">
+        <div class="col">
+            <h1 class="display-4 text-center my-4">Page Not Found</h1>
+        </div>
+    </div>
+</div>
+{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>404: Page not found</h1>
-    <p>Sorry, we couldn't find the page you were looking for.</p>
-    <a href="{% url 'home' %}" class="btn btn-primary">Return Home</a>
+<div class="row h-100 align-items-center">
+    <div class="col-md-8 mx-auto text-center">
+        <p class="lead">
+            We're sorry, but the page you were looking for doesn't exist.
+        </p>
+        <div class="my-4">
+            <a href="{% url 'home' %}" class="btn btn-primary">Return Home</a>
+        </div>
+    </div>
 </div>
 {% endblock %}
