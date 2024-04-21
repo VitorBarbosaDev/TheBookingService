@@ -15,10 +15,15 @@ body {
     flex-direction: column;
 }
 
-/* Navigation bar styling */
+
 .navbar {
     background-color: #ffffff;
     padding-bottom: 10px;
+
+}
+
+#navbar-nostyling {
+    padding: 0;
 }
 
 .nav-link {
@@ -395,11 +400,11 @@ main {
 /* Responsive adjustments for smaller devices */
 @media (max-width: 768px) {
     .page-content {
-        padding-top: 120px; /* Increased top padding for smaller devices */
+        padding-top: 120px;
     }
 
     .navbar {
-        padding-bottom: 0; /* Optional: Adjust the navbar padding if needed */
+        padding-bottom: 0;
     }
 
     .input-group, .input-group-append {
