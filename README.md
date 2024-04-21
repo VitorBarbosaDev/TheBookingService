@@ -4,8 +4,8 @@
 
 TheBookingService** is a cutting-edge, web-based platform designed to transform the way clients and service providers connect and manage appointments. This platform stands out by providing a user-friendly interface, comprehensive management tools, and a seamless booking process, making it easier than ever to book a wide range of services online.
 
-Live Site: [View Live Site]([https://thebookingservice.herokuapp.com/](https://thebookingservice-3eba3aca87b4.herokuapp.com/))
-Repo: [GitHub Repository]([https://github.com/yourUsername/TheBookingService](https://github.com/VitorBarbosaDev/TheBookingService))
+Live Site: [View Live Site](https://thebookingservice-3eba3aca87b4.herokuapp.com/)
+Repo: [GitHub Repository](https://github.com/VitorBarbosaDev/TheBookingService)
 
 ### Why Choose TheBookingService?
 - **Efficiency at Your Fingertips**: Quick booking, rescheduling, and cancellation of services.
