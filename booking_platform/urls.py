@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import handler404
 from django.http import HttpResponseNotFound
+from .views import handler404
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,7 +32,4 @@ urlpatterns = [
     path('checkout/', include(('checkout.urls', 'checkout'), namespace='checkout')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-def custom_404(request, exception):
-    return HttpResponseNotFound('404 Error: Page not found')
-
-handler404 = custom_404
+handler404 = 'booking_platform.views.handler404'
