@@ -150,21 +150,53 @@ The design of TheBookingService prioritizes clarity, ease of use, and responsive
 
 ---
 
-## Deployment
+## Deployment & Local Development
 
-### Deploying to Heroku
-1. Create a Heroku account and log in.
-2. Create a new app and select your region.
-3. Attach a PostgreSQL database to your Heroku app.
-4. Set environment variables in the settings of your Heroku app.
-5. Deploy your codebase to Heroku via Git.
+### Deployment to Heroku with PostgreSQL and Cloudinary
+
+This Django application is configured to be hosted on Heroku, using PostgreSQL for the database and Cloudinary for image storage. Follow these steps to deploy:
+
+#### Heroku Deployment
+
+1. **Create a Heroku account:** If you don't have one, sign up at [Heroku](https://www.heroku.com/).
+2. **Install Heroku CLI:** Follow the instructions [here](https://devcenter.heroku.com/articles/heroku-cli) to install the Heroku Command Line Interface.
+3. **Login to Heroku:** Run `heroku login` in your terminal and log in through the browser.
+4. **Create a new Heroku app:** In your terminal, run `heroku create your-app-name`.
+5. **Set up ElephantSQL:** 
+   - Sign up at [ElephantSQL](https://www.elephantsql.com/).
+   - Create a new instance and choose the appropriate plan.
+   - Copy the URL provided by ElephantSQL.
+   - Set the `DATABASE_URL` in Heroku's settings to this URL.  
+6. **Set up Stripe:**
+   - Sign up or log in at [Stripe](https://stripe.com/).
+   - Navigate to the API keys section under the Developers tab.
+   - Copy your `STRIPE_PUBLIC_KEY` and `STRIPE_SECRET_KEY`.
+   - Add these keys to your Heroku app's environment variables.
+7. **Set up environment variables:** Configure your environment variables in Heroku under the app's "Settings" tab. You'll need to set variables like  `SECRET_KEY`, `DATABASE_URL`,`CLOUDINARY_URL`,`STRIPE_PUBLIC_KEY`,`STRIPE_SECRET_KEY`,`STRIPE_WH_SECRET`,`EMAIL_HOST_PASS`,`EMAIL_HOST_USER`
+8. **Deploy the app:** Push your code to Heroku using Git (`git push heroku main`).
+9. **Run migrations:** After deployment, run `heroku run python manage.py migrate` to apply database migrations.
+10. **Open your app:** You can now access your app by running `heroku open` or visiting the app's URL.
+
+#### Cloudinary Setup
+
+1. **Create a Cloudinary account:** Sign up at [Cloudinary](https://cloudinary.com/).
+2. **Get your Cloudinary URL:** Navigate to the "Dashboard" to find your Cloudinary URL.
+3. **Set the Cloudinary URL in Heroku:** Add your Cloudinary URL to the environment variables in your Heroku app settings.
 
 ### Local Development
-1. Clone the repository.
-2. Set up a virtual environment and install dependencies.
-3. Create a .env file for environment variables.
-4. Run `python manage.py migrate` to set up the database.
-5. Start the server with `python manage.py runserver`.
+
+#### Cloning the Repository
+
+1. **Open the Terminal:** On your local machine, open the terminal.
+2. **Clone the Repository:** Run `git clone https://github.com/VitorBarbosaDev/TheBookingService/.git` to clone the forked repository.
+3. **Navigate to the Directory:** Enter the cloned directory (`cd TheBookingService`).
+4. **Install Dependencies:** Run `pip install -r requirements.txt` to install required Python packages.
+5. **Create a .env file:** Set up a `.env` file with necessary environment variables like `SECRET_KEY`, `DATABASE_URL`,`CLOUDINARY_URL`,`STRIPE_PUBLIC_KEY`,`STRIPE_SECRET_KEY`,`STRIPE_WH_SECRET`,`EMAIL_HOST_PASS`,`EMAIL_HOST_USER`,`DEVELOPMENT`.
+6. **Run Migrations:** Execute `python manage.py migrate` to apply database migrations.
+7. **Start the Development Server:** Run `python manage.py runserver` to start the Django development server.
+8. **Open the Application:** Open `localhost:8000` in your web browser to view the application.
+
+This deployment and local development guide ensures that TheBookingService is set up with a solid foundation for both production and development environments, incorporating robust services like Heroku for hosting, PostgreSQL for database management, and Cloudinary for image storage, thus ensuring scalability and efficiency.
 
 ---
 
@@ -184,3 +216,6 @@ Testing information can be found in the detailed [Testing.md](https://github.com
 
 ### Acknowledgements
 - Thanks to the Django community for providing extensive documentation and support.
+
+
+
