@@ -202,7 +202,7 @@ This comprehensive guide ensures that TheBookingService is set up with a solid f
 
 ## Testing
 
-Testing information can be found in the detailed [Testing.md](https://github.com/VitorBarbosaDev/TheBookingService/blob/main/TESTING.md) document.
+Testing information can be found in the detailed [Testing.md](https://github.com/VitorBarbosaDev/TheBookingService/blob/main/TESTING.MD) document.
 
 ---
 
