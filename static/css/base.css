@@ -1,3 +1,17 @@
+/* CSS Variables for consistent color theming */
+:root {
+    --primary-blue: #007bff;
+    --primary-blue-dark: #0056b3;
+    --text-dark: #333;
+    --text-medium: #555;
+    --white: #ffffff;
+    --black: #000000;
+    --background-light: #f4f4f4;
+    --transition-speed: 0.3s;
+    --background-dark: #343a40;
+    --background-lighter: rgba(248, 248, 248, 0.95);
+}
+
 html {
     height: 100%;
 }
@@ -7,8 +21,8 @@ body {
     font-family: 'Lato', sans-serif;
     margin: 0;
     padding-top: 80px;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: var(--background-light);
+    color: var(--text-dark);
     line-height: 1.6;
     min-height: 100%;
     display: flex;
@@ -17,7 +31,7 @@ body {
 
 
 .navbar {
-    background-color: #ffffff;
+    background-color: var(--white);
     padding-bottom: 10px;
 
 }
@@ -27,30 +41,65 @@ body {
 }
 
 .nav-link {
-    color: #555 !important;
+    color: var(--text-medium) !important;
     font-weight: bold;
+    background-color: transparent !important;
+    transition: all var(--transition-speed) ease;
 }
 
 .nav-link:hover, .nav-link:focus {
-    color: #007bff !important;
+    color: var(--primary-blue) !important;
+    background-color: transparent !important;
+    transform: translateY(-1px);
+}
+
+/* Ensure dropdown toggles also have transparent backgrounds */
+.navbar .nav-item .dropdown-toggle {
+    background-color: transparent !important;
+    transition: all var(--transition-speed) ease;
+}
+
+.navbar .nav-item .dropdown-toggle:hover,
+.navbar .nav-item .dropdown-toggle:focus {
+
+    background-color: transparent !important;
+    color: var(--primary-blue) !important;
 }
 
 /* Header and logo styling */
 .header-logo {
     font-size: 22px;
     font-weight: bold;
+    color: var(--text-dark);
+    transition: color var(--transition-speed) ease;
 }
 
+.header-logo:hover {
+    color: var(--primary-blue);
+    text-decoration: none;
+}
 
 /* Site name/logo styling */
 #mobile-home {
     font-weight: bold;
     font-size: 20px;
+    color: var(--text-dark);
+    transition: color var(--transition-speed) ease;
+}
+
+#mobile-home:hover {
+    color: var(--primary-blue);
+    text-decoration: none;
 }
 
 /* Icons in the navbar */
 .fas {
     margin-right: 5px;
+    transition: color var(--transition-speed) ease;
+}
+
+.nav-link:hover .fas {
+    color: var(--primary-blue);
 }
 
 /* Dropdown menu styling */
@@ -58,19 +107,108 @@ body {
     border-radius: 0;
 }
 
+.dropdown-item {
+    transition: all var(--transition-speed) ease;
+}
+
+.dropdown-item:hover {
+    background-color: var(--background-lighter);
+    color: var(--primary-blue) !important;
+}
+
+.dropdown-item:active {
+    background-color: var(--primary-blue-dark) !important;
+    color: var(--white) !important;
+}
+
+/* Dropdown toggle styling when opened */
+.dropdown-toggle[aria-expanded="true"] {
+    background-color: rgba(0, 123, 255, 0.1) !important;
+    color: var(--primary-blue) !important;
+}
+
+/* Mobile dropdown styling */
+@media (max-width: 992px) {
+    .dropdown-menu {
+        background-color: #e9ecef;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .dropdown-item {
+        padding: 0.8rem 1.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .dropdown-item:last-child {
+        border-bottom: none;
+    }
+
+    .dropdown-item:hover {
+        background-color: var(--primary-blue) !important;
+        color: var(--white) !important;
+        transform: none;
+        margin: 0 0.5rem;
+        border-radius: 4px;
+    }
+}
+
 /* Search and other form elements */
 .form-control {
     border-radius: 0;
+    border-color: var(--text-medium);
+    transition: border-color var(--transition-speed) ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 /* Buttons */
 .btn-black {
-    background-color: #333;
-    color: #fff;
+    background-color: var(--text-dark);
+    color: var(--white);
+    transition: all var(--transition-speed) ease;
 }
 
 .btn-black:hover {
-    background-color: #000;
+    background-color: var(--black);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    border-color: var(--primary-blue);
+    transition: all var(--transition-speed) ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-blue-dark);
+    border-color: var(--primary-blue-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Text hover effects */
+.text-hover-blue {
+    transition: color var(--transition-speed) ease;
+}
+
+.text-hover-blue:hover {
+    color: var(--primary-blue) !important;
+    cursor: pointer;
+}
+
+/* Link hover effects */
+a {
+    color: var(--text-dark);
+    transition: color var(--transition-speed) ease;
+}
+
+a:hover {
+    color: var(--primary-blue);
 }
 
 /* Utility classes */
@@ -421,4 +559,3 @@ main {
         max-width: none; /* Removes the max-width on smaller screens to allow full width */
     }
 }
-

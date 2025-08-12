@@ -9,6 +9,7 @@ from accounts.models import Category
 from business.models import BusinessHours , Business
 import logging
 from django.db.models import Q
+from django.http import Http404
 
 
 class ServiceListView(ListView):
@@ -53,8 +54,18 @@ def service_list_by_category(request, category_slug):
     businesses = Business.objects.none()  # Start with no businesses
 
     if category_slug != 'all':
-        category = get_object_or_404(Category, slug=category_slug)
-        services = get_services_by_category(category)
+        try:
+            category = Category.objects.get(slug=category_slug)
+            services = get_services_by_category(category)
+        except Category.DoesNotExist:
+            # Create custom context for category not found
+            popular_categories = Category.objects.filter(parent=None)[:6]
+            context = {
+                'popular_categories': popular_categories,
+                'category_error': True,
+                'requested_category': category_slug,
+            }
+            return render(request, '404.html', context, status=404)
 
     query = request.GET.get('q')
     if query:
@@ -126,4 +137,3 @@ def service_list(request):
     context['businesses'] = businesses_list
 
     return render(request, 'services/service_list.html', context)
-

@@ -15,77 +15,100 @@
     </form>
 
     <div class="row">
-        {% for service in services %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                {% if service.image %}
-                <img src="{{ service.image.url }}" class="card-img-top" alt="{{ service.name }}">
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title"><strong>{{ service.name }} </strong></h5>
-                    <p class="card-text">{{ service.description|truncatewords:20 }}</p>
-                    <p class="card-text"><strong>Business:</strong> <a href="{% url 'business:business_detail' pk=service.business.pk %}">{{ service.business.name }}</a></p>
-                    <div class="star-rating">
-                        {% if service.rating %}
-                        {% for _ in "12345" %}
-                        {% if forloop.counter <= service.rating %}
-                        <i class="fas fa-star"></i> <!-- full star -->
-                        {% else %}
-                        <i class="far fa-star"></i> <!-- empty star -->
-                        {% endif %}
-                        {% endfor %}
-                        {% else %}
-                        <span>No Ratings Yet</span>
-                        {% endif %}
+        {% if services or businesses %}
+            {% for service in services %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if service.image %}
+                    <img src="{{ service.image.url }}" class="card-img-top" alt="{{ service.name }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title"><strong>{{ service.name }} </strong></h5>
+                        <p class="card-text">{{ service.description|truncatewords:20 }}</p>
+                        <p class="card-text"><strong>Business:</strong> <a href="{% url 'business:business_detail' pk=service.business.pk %}">{{ service.business.name }}</a></p>
+                        <div class="star-rating">
+                            {% if service.rating %}
+                            {% for _ in "12345" %}
+                            {% if forloop.counter <= service.rating %}
+                            <i class="fas fa-star"></i> <!-- full star -->
+                            {% else %}
+                            <i class="far fa-star"></i> <!-- empty star -->
+                            {% endif %}
+                            {% endfor %}
+                            {% else %}
+                            <span>No Ratings Yet</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">
+                            {% if service.service_type == 'fixed' %}
+                            Price: ${{ service.price }}
+                            {% elif service.service_type == 'hourly' %}
+                            Price per hour: ${{ service.price_per_hour }}
+                            {% endif %}
+                        </small>
+                        <a href="{% url 'services:service_detail' service.id %}" class="btn btn-primary float-right">View Details</a>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <small class="text-muted">
-                        {% if service.service_type == 'fixed' %}
-                        Price: ${{ service.price }}
-                        {% elif service.service_type == 'hourly' %}
-                        Price per hour: ${{ service.price_per_hour }}
-                        {% endif %}
-                    </small>
-                    <a href="{% url 'services:service_detail' service.id %}" class="btn btn-primary float-right">View Details</a>
-                </div>
             </div>
-        </div>
-        {% empty %}
-        <p class="text-center">{% trans 'No services found.' %}</p>
-        {% endfor %}
+            {% endfor %}
 
-        {% for business in businesses %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                {% if business.logo %}
-                <img src="{{ business.logo.url }}" class="card-img-top" alt="{{ business.name }}">
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title"><strong>{{ business.name }} </strong></h5>
-                    <p class="card-text">{{ business.description|truncatewords:20 }}</p>
-                    <div class="star-rating">
-                        {% if business.rating %}
-                        {% for _ in "12345" %}
-                        {% if forloop.counter <= business.rating %}
-                        <i class="fas fa-star"></i> <!-- full star -->
-                        {% else %}
-                        <i class="far fa-star"></i> <!-- empty star -->
-                        {% endif %}
-                        {% endfor %}
-                        {% else %}
-                        <span>No Ratings Yet</span>
-                        {% endif %}
+            {% for business in businesses %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if business.logo %}
+                    <img src="{{ business.logo.url }}" class="card-img-top" alt="{{ business.name }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title"><strong>{{ business.name }} </strong></h5>
+                        <p class="card-text">{{ business.description|truncatewords:20 }}</p>
+                        <div class="star-rating">
+                            {% if business.rating %}
+                            {% for _ in "12345" %}
+                            {% if forloop.counter <= business.rating %}
+                            <i class="fas fa-star"></i> <!-- full star -->
+                            {% else %}
+                            <i class="far fa-star"></i> <!-- empty star -->
+                            {% endif %}
+                            {% endfor %}
+                            {% else %}
+                            <span>No Ratings Yet</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'business:business_detail' business.id %}" class="btn btn-primary float-right">Visit Business</a>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <a href="{% url 'business:business_detail' business.id %}" class="btn btn-primary float-right">Visit Business</a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <!-- Combined No Results Found Message -->
+            <div class="col-12">
+                <div class="empty-state text-center py-5">
+                    <div class="empty-state-icon mb-4">
+                        <i class="fas fa-building" style="font-size: 4rem; color: var(--text-medium); opacity: 0.5;"></i>
+                    </div>
+                    <h3 style="color: var(--text-dark); margin-bottom: 1rem;">No Results Found</h3>
+                    <p class="lead mb-4" style="color: var(--text-medium); max-width: 500px; margin: 0 auto;">
+                        {% if category %}
+                            No services or businesses found in the <strong>{{ category.name }}</strong> category. Try exploring other categories or refining your search.
+                        {% else %}
+                            We couldn't find any services or businesses matching your search criteria. Try adjusting your search terms or browse our categories.
+                        {% endif %}
+                    </p>
+                    <div class="empty-state-actions">
+                        <a href="{% url 'services:service_list_by_category' 'all' %}" class="btn btn-primary mr-3">
+                            <i class="fas fa-list mr-2"></i>Browse All Services
+                        </a>
+                        <a href="{% url 'home' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-home mr-2"></i>Go Home
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-        {% empty %}
-        <p class="text-center">{% trans 'No businesses found.' %}</p>
-        {% endfor %}
+        {% endif %}
     </div>
 </div>
 {% endblock %}
