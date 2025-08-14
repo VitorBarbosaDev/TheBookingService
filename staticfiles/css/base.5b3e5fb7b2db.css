@@ -1,0 +1,649 @@
+/* CSS Variables for consistent color theming */
+:root {
+    --primary-blue: #007bff;
+    --primary-blue-dark: #0056b3;
+    --text-dark: #333;
+    --text-medium: #555;
+    --white: #ffffff;
+    --black: #000000;
+    --background-light: #f4f4f4;
+    --transition-speed: 0.3s;
+    --background-dark: #343a40;
+    --background-lighter: rgba(248, 248, 248, 0.95);
+}
+
+html {
+    height: 100%;
+}
+
+
+body {
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+    padding-top: 80px;
+    background-color: var(--background-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.navbar {
+    background-color: var(--white);
+    padding-bottom: 10px;
+
+}
+
+#navbar-nostyling {
+    padding: 0;
+}
+
+.nav-link {
+    color: var(--text-medium) !important;
+    font-weight: bold;
+    background-color: transparent !important;
+    transition: all var(--transition-speed) ease;
+}
+
+.nav-link:hover, .nav-link:focus {
+    color: var(--primary-blue) !important;
+    background-color: transparent !important;
+    transform: translateY(-1px);
+}
+
+/* Ensure dropdown toggles also have transparent backgrounds */
+.navbar .nav-item .dropdown-toggle {
+    background-color: transparent !important;
+    transition: all var(--transition-speed) ease;
+}
+
+.navbar .nav-item .dropdown-toggle:hover,
+.navbar .nav-item .dropdown-toggle:focus {
+
+    background-color: transparent !important;
+    color: var(--primary-blue) !important;
+}
+
+/* Header and logo styling */
+.header-logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--text-dark);
+    transition: color var(--transition-speed) ease;
+}
+
+.header-logo:hover {
+    color: var(--primary-blue);
+    text-decoration: none;
+}
+
+/* Site name/logo styling */
+#mobile-home {
+    font-weight: bold;
+    font-size: 20px;
+    color: var(--text-dark);
+    transition: color var(--transition-speed) ease;
+}
+
+#mobile-home:hover {
+    color: var(--primary-blue);
+    text-decoration: none;
+}
+
+/* Icons in the navbar */
+.fas {
+    margin-right: 5px;
+    transition: color var(--transition-speed) ease;
+}
+
+.nav-link:hover .fas {
+    color: var(--primary-blue);
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+    border-radius: 0;
+}
+
+.dropdown-item {
+    transition: all var(--transition-speed) ease;
+}
+
+.dropdown-item:hover {
+    background-color: var(--background-lighter);
+    color: var(--primary-blue) !important;
+}
+
+.dropdown-item:active {
+    background-color: var(--primary-blue-dark) !important;
+    color: var(--white) !important;
+}
+
+/* Dropdown toggle styling when opened */
+.dropdown-toggle[aria-expanded="true"] {
+    background-color: rgba(0, 123, 255, 0.1) !important;
+    color: var(--primary-blue) !important;
+}
+
+/* Mobile dropdown styling */
+@media (max-width: 992px) {
+    .dropdown-menu {
+        background-color: #e9ecef;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .dropdown-item {
+        padding: 0.8rem 1.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .dropdown-item:last-child {
+        border-bottom: none;
+    }
+
+    .dropdown-item:hover {
+        background-color: var(--primary-blue) !important;
+        color: var(--white) !important;
+        transform: none;
+        margin: 0 0.5rem;
+        border-radius: 4px;
+    }
+}
+
+/* Search and other form elements */
+.form-control {
+    border-radius: 0;
+    border-color: var(--text-medium);
+    transition: border-color var(--transition-speed) ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Buttons */
+.btn-black {
+    background-color: var(--text-dark);
+    color: var(--white);
+    transition: all var(--transition-speed) ease;
+}
+
+.btn-black:hover {
+    background-color: var(--black);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    border-color: var(--primary-blue);
+    transition: all var(--transition-speed) ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-blue-dark);
+    border-color: var(--primary-blue-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Text hover effects */
+.text-hover-blue {
+    transition: color var(--transition-speed) ease;
+}
+
+.text-hover-blue:hover {
+    color: var(--primary-blue) !important;
+    cursor: pointer;
+}
+
+/* Link hover effects */
+a {
+    color: var(--text-dark);
+    transition: color var(--transition-speed) ease;
+}
+
+a:hover {
+    color: var(--primary-blue);
+}
+
+/* Utility classes */
+.text-center {
+    text-align: center;
+}
+
+.mr-5 {
+    margin-right: 3rem;
+}
+
+.my-0 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+
+main {
+    flex: 1;
+}
+
+.main-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.main-content p {
+    font-size: 1.1rem;
+}
+/* Button enhancements */
+.btn-primary, .btn-black {
+    border-radius: 0;
+    padding: 10px 20px;
+    font-size: 18px;
+}
+
+.btn-primary:hover, .btn-black:hover {
+    opacity: 0.8;
+}
+
+/* Utility and responsive adjustments */
+.custom-spacing {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+
+.ProfilePicture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    object-fit: cover;
+    margin-top: -75px;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header-spacer {
+    margin-top: 100px;
+}
+
+.page-content {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    padding-top: 80px;
+}
+
+.business-details {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.business-details p, .business-details div {
+    margin-bottom: 10px;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.profile-picture, .business-logo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 20px auto;
+}
+
+.detail-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.detail-section strong {
+    color: #333;
+}
+
+.detail-action-buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    height: 38px;
+    box-sizing: border-box;
+}
+
+/* Ensure that both buttons have the same styling */
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Adjustments for button hover states */
+.btn-primary:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+.btn-danger:hover {
+    color: #fff;
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+
+.word-wrap {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+
+.url-wrap {
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+}
+
+.service-img {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+    border-radius: 10px;
+}
+.business-hours, .service-detail > p, .service-detail > h2 {
+    margin-top: 20px;
+}
+.book-btn {
+    margin-top: 20px;
+}
+
+.business-logo-preview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    display: block;
+    margin: 10px auto;
+}
+
+/* Custom Styles for the Login Form */
+.login-form {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.login-form h1 {
+    color: #333;
+}
+
+.login-form .btn-primary {
+    background-color: #0056b3;
+    border: none;
+}
+
+.login-form a {
+    color: #0056b3;
+}
+.star {
+    cursor: pointer;
+    font-size: 25px;
+    color: grey;
+}
+.star.rated {
+    color: gold;
+
+}
+
+.star-rating .fa-star, .star-rating .fa-star-half-alt, .star-rating .fa-star {
+    color: #FFD700; /* Gold color */
+}
+
+.star-rating .far.fa-star {
+    color: #ccc; /* Light gray color for empty stars */
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+    border-top-left-radius: calc(.25rem - 1px);
+    border-top-right-radius: calc(.25rem - 1px);
+}
+
+
+.card {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.card-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #eee;
+}
+
+.country-select {
+    max-width: 300px;
+    width: 100%;
+}
+
+.footer {
+    clear: both;
+    background-color: #343a40;
+    color: #fff;
+    padding: 1rem 0;
+}
+
+#mc_embed_signup .input-group {
+    display: flex;
+    width: 100%;
+}
+
+#mc_embed_signup .form-control {
+    flex-grow: 1;
+    margin-right: -1px;
+}
+
+#mc_embed_signup .input-group-append {
+    flex-grow: 0;
+}
+
+
+#mce-EMAIL {
+    max-width: 300px;
+    width: 100%;
+}
+
+.footer a {
+    color: #f8f9fa;
+    transition: color 0.3s;
+}
+
+.footer a:hover {
+    color: #adb5bd;
+}
+
+.footer .btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+.footer .btn-primary:hover {
+    background-color: #0056b3;
+}
+
+
+@media (max-width: 768px) {
+    .custom-spacing {
+        padding-top: 100px;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .d-lg-none {
+        display: block !important;
+    }
+}
+
+@media (min-width: 993px) {
+    .d-none.d-lg-block {
+        display: block !important;
+    }
+}
+
+
+/* Responsive adjustments for smaller devices */
+@media (max-width: 768px) {
+    .page-content {
+        padding-top: 120px;
+    }
+
+    .navbar {
+        padding-bottom: 0;
+    }
+
+    .input-group, .input-group-append {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .input-group-append .btn {
+        width: 100%;
+        margin-top: 10px; /* Adds a little space between the input and the button on smaller screens */
+    }
+
+    #mce-EMAIL {
+        max-width: none; /* Removes the max-width on smaller screens to allow full width */
+    }
+}
+
+/* Hamburger menu styling */
+.navbar-toggler {
+    border: none;
+    padding: 4px 8px;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.navbar-toggler:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2833, 37, 41, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Mobile navigation styling */
+.navbar-brand {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--text-dark) !important;
+}
+
+.navbar-brand:hover {
+    color: var(--primary-blue) !important;
+    text-decoration: none;
+}
+
+/* Mobile nav dropdown styling */
+#mobileNav .navbar-nav {
+    width: 100%;
+}
+
+#mobileNav .nav-link {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    color: var(--text-dark) !important;
+    font-weight: 500;
+}
+
+#mobileNav .nav-link:hover {
+    background-color: var(--background-lighter);
+    color: var(--primary-blue) !important;
+}
+
+#mobileNav .dropdown-menu {
+    border: none;
+    box-shadow: none;
+    background-color: var(--background-lighter);
+    margin-left: 1rem;
+}
+
+#mobileNav .dropdown-item {
+    padding: 0.5rem 1rem;
+    color: var(--text-medium);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+#mobileNav .dropdown-item:hover {
+    background-color: var(--primary-blue);
+    color: var(--white) !important;
+}
+
+#mobileNav .dropdown-item:last-child {
+    border-bottom: none;
+}
+
+/* Ensure mobile nav collapses properly */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+    }
+
+    body {
+        padding-top: 70px; /* Adjust for smaller navbar height on mobile */
+    }
+}
+
+/* Desktop nav adjustments */
+@media (min-width: 992px) {
+    body {
+        padding-top: 120px; /* Maintain larger padding for desktop */
+    }
+}
