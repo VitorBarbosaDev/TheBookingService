@@ -288,7 +288,7 @@ main {
     max-width: 800px;
     margin: auto;
     padding: 20px;
-    padding-top: 80px;
+    padding-top: 15px;
 }
 
 .business-details {
@@ -548,7 +548,7 @@ main {
 /* Responsive adjustments for smaller devices */
 @media (max-width: 768px) {
     .page-content {
-        padding-top: 120px;
+        padding-top: 10px;
     }
 
     .navbar {
@@ -619,7 +619,7 @@ main {
     .mobile-menu .btn { height: 42px; }
 
     /* Keep page content from hiding under header (you already add padding-top) */
-    body { padding-top: 70px; }
+    body { padding-top: 60px; }
 }
 
 /* Improve dropdown focus/hover on mobile */
