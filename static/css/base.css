@@ -626,3 +626,7 @@ main {
 @media (hover: hover) and (pointer: fine) {
     .mobile-item:hover { background: var(--background-lighter); }
 }
+
+.mt-5 {
+    margin-top: 0px !important;
+}
