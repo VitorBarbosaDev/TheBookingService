@@ -65,6 +65,10 @@ body {
     background-color: transparent !important;
     color: var(--primary-blue) !important;
 }
+.navbar .nav-item .dropdown-toggle:active {
+    background-color: var(--primary-blue-dark) !important;
+    color: var(--white) !important;
+}
 
 /* Header and logo styling */
 .header-logo {
@@ -90,6 +94,11 @@ body {
 #mobile-home:hover {
     color: var(--primary-blue);
     text-decoration: none;
+}
+
+fa-search {
+    color: var(--text-medium);
+    transition: color var(--transition-speed) ease;
 }
 
 /* Icons in the navbar */
@@ -151,6 +160,7 @@ body {
         margin: 0 0.5rem;
         border-radius: 4px;
     }
+
 }
 
 /* Search and other form elements */
@@ -558,4 +568,61 @@ main {
     #mce-EMAIL {
         max-width: none; /* Removes the max-width on smaller screens to allow full width */
     }
+}
+
+/* ===== Mobile top header polish ===== */
+@media (max-width: 992px) {
+    .navbar { padding: 0.25rem 0; }
+    #mobile-home { font-size: 16px; }
+    .mobile-brand p { font-size: 18px; }
+
+    .mobile-menu { position: static; } /* so the panel can stretch full width */
+    .mobile-menu .dropdown-menu.mobile-menu-panel {
+        left: 0 !important;
+        right: 0 !important;
+        transform: none !important;
+        border-radius: 10px;
+        margin: 0.5rem;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        background: var(--white);
+        border: 1px solid #e9ecef;
+    }
+
+    .mobile-menu-search {
+        position: sticky;
+        top: 0;
+        background: var(--white);
+        z-index: 2;
+    }
+
+    .mobile-item {
+        padding: 0.9rem 1.1rem;
+        font-size: 16px;
+        border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    .mobile-item:last-of-type { border-bottom: none; }
+
+    .mobile-section {
+        padding: 0.6rem 1.1rem;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--text-medium);
+        background: #f8f9fa;
+        border-top: 1px solid #f1f3f5;
+        border-bottom: 1px solid #f1f3f5;
+    }
+
+    /* Larger inputs/buttons for touch */
+    .mobile-menu .form-control { height: 42px; }
+    .mobile-menu .btn { height: 42px; }
+
+    /* Keep page content from hiding under header (you already add padding-top) */
+    body { padding-top: 70px; }
+}
+
+/* Improve dropdown focus/hover on mobile */
+@media (hover: hover) and (pointer: fine) {
+    .mobile-item:hover { background: var(--background-lighter); }
 }
